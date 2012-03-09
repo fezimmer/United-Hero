@@ -1,0 +1,58 @@
+
+INPUT.submit
+{
+	color: #1A3C7F;
+	background-color:#E7ECF7;
+	border-color :#3366CC;
+	font-weight: normal;
+}
+INPUT.cancel
+{
+	color: #7D1512;
+	background-color:#F9DDDD;
+	border-color :#EB2D28;
+	font-weight: normal;
+}
+
+.alertgood {
+	clear: both;
+	text-align: left;
+	border-top: 1px solid #9c9;
+	border-bottom: 1px solid #9c9;
+	padding: 5px 5px 5px 30px;
+	font-size: 11px;
+	margin: 0 20px 15px 0px;
+	color: #060;
+	background: url("/images/checkicon.gif") #e2f9e3 left no-repeat;
+}
+
+.alertbad {
+	clear: both;
+	text-align: left;
+	font-weight: bold;
+	border-top: 1px solid #c99;
+	border-bottom: 1px solid #c99;
+	padding: 5px 5px 5px 30px;
+	font-size: 11px;
+	margin: 0 20px 15px 0px;
+	background: url("/images/badicon.gif") #c00 left no-repeat;
+	/* background: url("/images/error.gif") #c00 left no-repeat; */
+	color: #fff;
+}
+
+.hand{
+	cursor: pointer; /* hand-shaped cursor */
+	cursor: hand; /* for IE 5.x */
+}
+
+
+.form_fix{
+	font-family: Tahoma, Verdana, Arial, sans-serif;
+	font-size: 11px;
+	font-variant:small-caps;
+	color: #DA2020;
+	font-weight:bold;
+	padding: 4px;
+	text-align: left;
+	background: #FBB9B9;
+}

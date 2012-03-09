@@ -1,0 +1,22 @@
+Thank you for downloading the: BEST FLASH VIDEO PLAYER. EVER.
+
+Included are:
+	• Flash CS3 Flash File
+	• Flash CS4 Flash File
+	• help.pdf
+	• index.html
+	• movie.flv
+	• thumb.jpg
+	• tweenlite.as
+	• mouse inactive class (com)
+
+How to modify the file:
+	To get this file working you really need not open flash at all.
+	STEP 1: Embed the player.swf using either javascript or the object methods. 
+	STEP 2: change the dimensions of your flash file to the same dimensions of your video/ movie file. 
+	
+	STEP 3: Change the poster jpg, movie file, or the players controls through the flashvars of the embed code (see help.pdf for more about that).  
+	NOTE: I included the source fla files, but there is very little reason for them to be opened.
+
+Good Luck using the file in your projects!
+

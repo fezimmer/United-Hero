@@ -1,0 +1,65 @@
+@charset "utf-8";
+/* CSS Document */
+
+body {
+	background-color: #FFFFFF;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	color: #FFFFFF;
+}
+
+#divLogoresults {
+	width: 290px;
+	display: block;
+	margin-left: 40px;
+	margin-bottom: 10px;
+	margin-top: 10px;
+}
+#divLogoresults img {
+	border-top-style: none;
+	border-right-style: none;
+	border-bottom-style: none;
+	border-left-style: none;
+}
+#divHomepage {
+	display: block;
+	float: left;
+	width: 225px;
+	margin-top: 11px;
+}
+#divStack {
+	width: 250px;
+}
+
+#divFifty {
+	display: block;
+	float: left;
+	width: 225px;
+	margin-top: 12px;
+}
+.large {
+	font-size: 17px;
+	line-height: 11px;
+	display: inline;
+	font-weight: normal;
+}
+#divWrapper {
+	width: 760px;
+	margin-left: 10px;
+	float: left;
+	margin-bottom: 30px;
+}
+#divSearch {
+	width: 650px;
+	margin-left: 15px;
+	float: left;
+	margin-top: 22px;
+}
+#divResults {
+	width: 800px;
+	float: left;
+}
+#divLeft {
+	float: left;
+	width: 800px;
+}

@@ -1,0 +1,140 @@
+/*------------------POPUPS------------------------*/
+#fade {
+	display: none;
+	background: #000; 
+	position: fixed; left: 0; top: 0; 
+	z-index: 10;
+	width: 100%; height: 100%;
+	opacity: .80;
+	z-index: 9999;
+}
+.popup_block{
+	display: none;
+	background: #fff;
+	float: left;
+	font-size: 1.2em;
+	position: fixed;
+	top: 50%; left: 50%;
+	z-index: 99999;
+	padding-bottom:16px;
+	-webkit-box-shadow: 0px 0px 20px #000;
+	-moz-box-shadow: 0px 0px 20px #000;
+	box-shadow: 0px 0px 20px #000;
+	-webkit-border-bottom-right-radius: 6px;
+	-webkit-border-bottom-left-radius: 6px;
+	-moz-border-radius-bottomright: 6px;
+	-moz-border-radius-bottomleft: 6px;
+	-webkit-border-top-right-radius: 9px;
+	-webkit-border-top-left-radius: 9px;
+	-moz-border-radius-topright: 9px;
+	-moz-border-radius-topleft: 9px;
+}
+.popup_block input {
+	border: 1px solid #ccc;
+	border-radius: 2px;
+	box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+	font: 13px/16px Arial,sans-serif!important;
+	khtml-border-radius: 2px;
+	moz-border-radius: 2px;
+	moz-box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+	padding: 5px 6px;
+	webkit-border-radius: 2px;
+	webkit-box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+		width:150px;
+}
+.popup_block .spacer {
+	border-top:solid 1px #e0e0e0;
+	margin:20px 20px 25px 20px;
+}
+.modalHeader {
+	-webkit-border-top-right-radius: 6px;
+	-webkit-border-top-left-radius: 6px;
+	-moz-border-radius-topright: 6px;
+	-moz-border-radius-topleft: 6px;
+	background: #262626;
+	background:-moz-linear-gradient(top, #343433, #262626);
+	background: -webkit-gradient(linear, left top, left bottom,  from(#343433), to(#262626));
+	filter:progid:DXImageTransform.Microsoft.Gradient(startColorStr=#343433, endColorStr=#262626);
+	-ms-filter:"progid:DXImageTransform.Microsoft.Gradient(startColorStr=#343433, endColorStr=#262626)";
+	height:40px;
+	line-height:40px;
+	font-size:14px;
+	text-shadow:0px -1px 0px #000;
+	padding-left:20px;
+	color:#54CCE1;
+}
+.modalHeader img.icon {
+float:left;
+margin:13px 10px 0 0;
+}
+.popup_block h3.title {
+	font-size:16px;
+	padding:0;
+	margin:20px 0 5px 20px;
+	height:18px;
+
+	color:#333;
+}
+.popup_block h3.title span {
+	font-size:20px !important;
+	color:#999;
+}
+.action-buttons {
+	margin:10px 5px;
+}
+.button-gray-close
+{
+	moz-border-radius: 0px;
+	webkit-border-radius: 0px;
+	border-radius: 0px;
+	background: #f1f1f1;
+	background: -moz-linear-gradient(top,#e9e9e9,#d1d1d1);
+	background: -webkit-gradient(linear,left top,left bottom,from(#e9e9e9),to(#d1d1d1));
+	border: 1px solid #333;
+	color: #555;
+	pie-background: linear-gradient(top,#e9e9e9,#d1d1d1);
+	text-shadow: 0 1px 0 #fff;
+
+}
+.button-gray-close:hover,.button-gray-close:focus
+{
+	background: #ececec;
+	background: -moz-linear-gradient(top,#e1e1e1,#c1c1c1);
+	background: -webkit-gradient(linear,left top,left bottom,from(#e1e1e1),to(#c1c1c1));
+	color: #555;
+	pie-background: linear-gradient(top,#e1e1e1,#c1c1c1);
+}
+.button-gray-close:active,.button-gray-close.active,.button-gray-close.current
+{
+	background: #ddd;
+	background: -moz-linear-gradient(top,#ccc,#e9e9e9);
+	background: -webkit-gradient(linear,left top,left bottom,from(#ccc),to(#e9e9e9));
+	border: 1px solid #333;
+	color: #555;
+	pie-background: linear-gradient(top,#ccc,#e9e9e9);
+}
+
+.btn-close {
+	float: right; 
+	margin:7px 16px 0 0;
+
+}
+.btn-register, .btn-login {
+	float: right; 
+	margin:7px 7px 0 0;
+}
+
+.popup p {
+	padding: 5px 10px;
+	margin: 5px 0;
+}
+/*--Making IE6 Understand Fixed Positioning--*/
+*html #fade {
+	position: absolute;
+}
+*html .popup_block {
+	position: absolute;
+}
+
+
+

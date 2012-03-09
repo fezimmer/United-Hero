@@ -1,0 +1,100 @@
+body,td,th {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	color: #666666;
+}
+body {
+	margin-left: 0px;
+	margin-top: 0px;
+	margin-right: 0px;
+	margin-bottom: 0px;
+	background-color: #f2f2f2;
+}
+A{
+	color:#0066CC;
+	font-weight:bold;
+	text-decoration:none;
+}
+A:hover{
+	color:#0099CC;
+	text-decoration:underline;
+}
+A.menu{
+	color:#FFCC00;
+	font-weight:bold;
+	text-decoration:none;
+}
+A.menu:hover{
+	color:#FFFF00;
+	text-decoration:underline;
+}
+
+A.smalllink{
+	color:#3366CC;
+	font-size:10px;
+}
+A.biglink{
+	color:#3366CC;
+	font-weight:bold;
+	font-size:17px;
+}
+P{
+
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:11px;
+}
+FORM {
+	display: inline;
+}
+INPUT, TEXTAREA, SELECT, RADIO, CHECKBOX{
+	font-family: Verdana, Arial, sans-serif;
+	font-size: 11px;
+	background-color:#ffffff;
+	border-color :#cccccc;
+	color: #000000;
+	font-weight: normal;
+	border-width: 1px;
+	border-style: solid;
+}
+INPUT.submit{
+	color: #1A3C7F;
+	background-color:#E7ECF7;
+	border-color :#3366CC;
+	font-weight: normal;
+}
+INPUT.cancel{
+	color: #7D1512;
+	background-color:#F9DDDD;
+	border-color :#EB2D28;
+	font-weight: normal;
+}
+H1{
+	margin:0px,0px,0px,0px;
+	display: inline;
+	font-size: 14px;
+	color: #666666;
+	font-family: Arial, Helvetica, sans-serif;
+}
+.error {
+	font-family: Tahoma, Verdana, Arial, sans-serif;
+	font-size : 10px;
+	background: #ffb3b5;
+	font-weight: bold;
+}
+
+/*   TABLES     */
+
+TD{
+	font-family:Arial, Tahoma, Verdana, ;
+  	font-size: 11px;
+  	color: #FFCC00;
+}
+INPUT.bigfield{
+	font-size:14px;
+	height:19px;
+
+}
+.hand_cursor{
+	cursor: pointer; /* hand-shaped cursor */
+	cursor: hand; /* for IE 5.x */
+}

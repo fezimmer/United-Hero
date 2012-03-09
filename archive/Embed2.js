@@ -1,0 +1,2 @@
+// embed.js
+document.write('<embed src="player2/auto_play_var_player.swf" width="691" height="449" loop="False" wmode="transparent" quality="high" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash"></embed>')

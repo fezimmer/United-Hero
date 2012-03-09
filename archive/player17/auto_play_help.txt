@@ -1,0 +1,3 @@
+The new autoplay version. 
+
+if you want the file to autoplay add the flashVar autoplay = yes and you should be good to go. 

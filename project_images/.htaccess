@@ -1,0 +1,3 @@
+php_flag engine off
+RemoveType .php .php4 .php3 .phps .pl .cgi
+

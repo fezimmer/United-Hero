@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>United Hero: Invest in Americans.</title>
+<link href="styles/results.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+<!--Paste Banner Code After -->
+
+
+<!--END Banner Code -->
+
+<div id="divLogoresults"><a href="http://www.unitedhero.com"><img src="images/logo3.png" alt="United Hero"/></a></div>
+
+<div id="divWrapper">
+
+
+
+<div id="divSearch">
+
+<!--Paste Search Code After -->
+
+
+
+<style type="text/css">
+@import url(http://www.google.com/cse/api/branding.css);
+</style>
+<div class="cse-branding-bottom" style="background-color:#FFFFFF;color:#000000">
+  <div class="cse-branding-form">
+    <form action="http://www.unitedhero.com/results.html" id="cse-search-box">
+      <div>
+        <input type="hidden" name="cx" value="partner-pub-5659244258872257:fo5fb4vyxq7" />
+        <input type="hidden" name="cof" value="FORID:10" />
+        <input type="hidden" name="ie" value="ISO-8859-1" />
+        <input type="text" name="q" size="50" />
+        <input type="submit" name="sa" value="Search" />
+      </div>
+    </form>
+  </div>
+  <div class="cse-branding-logo">
+    <img src="http://www.google.com/images/poweredby_transparent/poweredby_FFFFFF.gif" alt="Google" />
+  </div>
+  <div class="cse-branding-text">
+    Custom Search
+  </div>
+</div>
+
+
+
+
+<!--END Search Code -->
+
+
+</div>
+
+
+<div id="divHomepage">
+<a href="http://unitedhero.ourtoolbar.com/">Get a United Hero toolbar.</a>
+</div>
+<div id="divFifty">
+  <a href="about.html">
+  <div class="large">50%</div>
+  &nbsp;of the proceeds from this<br />
+    search
+  will go to Americans.</a></div>
+</div>
+
+
+<div id="divLeft">
+
+<!--Paste Results Code After -->
+
+
+<div id="cse-search-results"></div>
+<script type="text/javascript">
+  var googleSearchIframeName = "cse-search-results";
+  var googleSearchFormName = "cse-search-box";
+  var googleSearchFrameWidth = 800;
+  var googleSearchDomain = "www.google.com";
+  var googleSearchPath = "/cse";
+</script>
+<script type="text/javascript" src="http://www.google.com/afsonline/show_afs_search.js"></script>
+
+
+
+
+<!--END Results Code -->
+</div>
+</body>
+</html>
