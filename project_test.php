@@ -179,6 +179,53 @@
 	}
 </style>
 
+                    <!-- changes added by Forrest Z.
+
+                        start rewards div -->
+
+                        <div class="reward-details inner-col">
+
+                            <h3 class="title">Rewards:</h3>
+
+                            <!-- begin reward -->
+                            <div class="reward">
+                                <h3 class="title">Donate $1</h3>
+                                <span class="description">Exclusive updates on the film sent directly to you!</span><br/><br/>
+                                    <div class="num">1. Reward </div>
+                                    <div class="claim">2 Claimed</div>
+                                <br/>
+                                <img src="/images/sample/fz_glasses.jpg" width="180"/>
+                                <span class="delivery">Estimated Delivery: Jan 2013</span>
+                            </div>
+                            <!-- end reward -->
+
+                            <!-- begin reward -->
+                            <div class="reward">
+                                <h3 class="title">Donate $10</h3>
+                                <span class="description">Special thanks on our website and in the film’s end credits, exclusive updates, plus a digital poster e-mailed to you, and a sneak peek at a scene from the film!</span><br/><br/>
+                                <div class="num">2. Reward </div>
+                                <div class="claim">2 Claimed</div>
+                                <br/>
+                                <img src="/images/sample/me_annie_noah.jpg" width="180"/>
+                                <span class="delivery">Estimated Delivery: Mar 2013</span>
+                            </div>
+                            <!-- end reward -->
+
+                            <!-- begin reward -->
+                            <div class="reward">
+                                <h3 class="title">Donate $25</h3>
+                                <span class="description">Digital download of the finished film, Sex After Kids postcard autographed by a member of the cast, a ring tone by the film&rsquo;s composer, plus everything above!</span><br/><br/>
+                                <div class="num">3. Reward </div>
+                                <div class="claim">12 Claimed</div>
+                                <br/>
+                                <img src="/images/sample/Trail in forest.jpg" width="180"/>
+                                <span class="delivery">Estimated Delivery: Jan 2013</span>
+                            </div>
+                            <!-- end reward -->
+			</div>
+
+                        <!-- end rewards div -->
+
 			<div class="featuredBox details inner-col">
 				<?
 					displayVideo($fldVideoHTML, "project");
@@ -228,14 +275,14 @@
 						}
 					?>
 
-					<div style="clear: both;"></div><br />
+					<br />
 					<iframe src="//www.facebook.com/plugins/like.php?app_id=267526983268917&amp;href=<?=$thisURL?>&amp;send=false&amp;layout=standard&amp;width=450&amp;show_faces=true&amp;action=like&amp;colorscheme=light&amp;font&amp;height=80" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:450px; height:80px;" allowTransparency="true"></iframe>
 
 					<a href="http://twitter.com/share" class="twitter-share-button" data-count="vertical">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
 
 				</div>
 			</div>
-			<div class="project-details inner-col" style="float:left;">
+			<div class="project-details inner-col">
 
 				<div id="paymentDiv" class="more-details" <? if (!$showPaymentForm) echo "style=\"display:none;\"";?>>
 					<h3 class="title">Donation Processing</h3>
@@ -304,7 +351,7 @@
 						</div>
 
                         </form>
-                        <div style="clear: both"></div>
+                        
 				</div>
 
 			<h3 class="title">Goal <?=$fldDesiredFundingAmount?></h3>
@@ -333,26 +380,9 @@
 
 			</div>
 
-                        <!--
-                        changes added by Forrest Z.
-
-                        start adding rewards div
-                        -->
-
-                        <div class="project-details-2 inner-col">
-
-                            <h3 class="title"><strong>Rewards:</strong></h3>
-				<div class="progress-info">
-				  test data
-				</div>
-				 
-			</div>
-
-                        <!--
-                        end adding rewards div
-                        -->
+                        
 		  <div>
-			 <div style="clear: both;"></div>
+			 <div style="clear: both"></div>
 			<div class="similar">Similar Projects
 				<a href="/browse_projects.php?pageNum=1" class="browse-more">Browse other Projects</a>
 			</div>
@@ -369,10 +399,10 @@
 
 			 <? include ('sidebar-featuredproject.inc.php'); ?>
 
-			 <div style="clear: both;"></div>
+			 
 
 		  </div>
-		</div>
+                        
 		<!--script src="http://static.ak.fbcdn.net/connect.php/js/FB.Share" type="text/javascript"></script-->
 		<script src="http://connect.facebook.net/en_US/all.js#xfbml=1"></script>
 		<script src="http://static.ak.fbcdn.net/connect.php/js/FB.Share" type="text/javascript"></script>

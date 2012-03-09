@@ -564,9 +564,8 @@ div.searchPanl_main {
 	overflow-y: auto;
 	overflow-x: hidden;
 }
-.project-details-2 {
+.reward-details {
 	width:196px;
-	height:800px;
 	float:right;
 	padding:10px;
 	margin: 10px 0 0 0;
@@ -581,6 +580,53 @@ div.searchPanl_main {
 	color:#333;
 	font-size:18px;
 	font-weight:bold;
+}
+.reward-details .title {
+	color:#333;
+	font-size:18px;
+	font-weight:bold;
+}
+.reward {
+        width: 180px;
+        margin:auto;
+        padding-top: 10px;
+        padding-bottom: 20px;
+}
+.reward .title{
+        font-weight: bold;
+        font-size: 16px;
+        color:#333;
+        padding-bottom: 5px;
+}
+.reward .description {
+        font-size:14px;
+        color:#333;
+        padding-bottom: 5px;
+}
+.reward .num {
+        background-color: #F8D100;
+        -moz-border-radius:5px;
+	-webkit-border-radius:5px;
+        color:white;
+        font-size:14px;
+        padding: 5px;
+        float: left;
+}
+.reward .claim {
+        background-image:none;
+        font-size:14px;
+        color:#333;
+        padding:5px;
+        margin-right:0px;
+        padding-left:0px;
+        float:right;
+        margin-bottom: 10px;
+}
+.reward .delivery {
+        font-size:10px;
+        color:#333;
+        padding:5px;
+        margin-left: 10px;
 }
 .project-details .project-cta {
 	padding:10px 0;
@@ -663,16 +709,17 @@ margin-left:0;
 }
 .similar {
 	background:#FFF;
-    height:auto;
+        height:auto;
 	padding:15px !important;
 	font-size:16px;
 	margin-top:10px;
 	-moz-border-radius:5px;
 	-webkit-border-radius:5px;
 	border-radius:5px;
-   padding:5px;
+        padding:5px;
 	position:relative;
         width: 908px;
+        float:left;
 }
 .similar a.browse-more {
 	position: absolute;
