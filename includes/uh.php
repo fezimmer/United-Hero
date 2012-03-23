@@ -1,5 +1,16 @@
 <?
-	function getTimeRemaining($projectID){
+	//function developed by Forrest Z. of LCM for rewards.php file
+        //serves to validate that a reward has been selected
+        function rewardIsSelected($rewards){
+            foreach ($rewards as $reward){
+                if($reward == "Claimed"){
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function getTimeRemaining($projectID){
 		$projCreateDate = q1("SELECT fldDateCreated FROM tblProject WHERE pkProjectID = $projectID");
 		$projEndDate = q1("SELECT fldEndDate FROM tblProject WHERE pkProjectID = $projectID");
 

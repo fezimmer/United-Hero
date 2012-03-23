@@ -169,8 +169,8 @@
 
 	}//action = submitPayment
 
-
-	include("header_test.php");
+        // needs this header due some special formatting
+	include("header_proj.php");
 ?>
 
 <style>
@@ -178,53 +178,8 @@
 		text-decoration: underline;
 	}
 </style>
-
-                    <!-- changes added by Forrest Z.
-
-                        start rewards div -->
-
-                        <div class="reward-details inner-col">
-
-                            <h3 class="title">Rewards:</h3>
-
-                            <!-- begin reward -->
-                            <div class="reward">
-                                <h3 class="title">Donate $1</h3>
-                                <span class="description">Exclusive updates on the film sent directly to you!</span><br/><br/>
-                                    <div class="num">1. Reward </div>
-                                    <div class="claim">2 Claimed</div>
-                                <br/>
-                                <img src="/images/sample/fz_glasses.jpg" width="180"/>
-                                <span class="delivery">Estimated Delivery: Jan 2013</span>
-                            </div>
-                            <!-- end reward -->
-
-                            <!-- begin reward -->
-                            <div class="reward">
-                                <h3 class="title">Donate $10</h3>
-                                <span class="description">Special thanks on our website and in the film’s end credits, exclusive updates, plus a digital poster e-mailed to you, and a sneak peek at a scene from the film!</span><br/><br/>
-                                <div class="num">2. Reward </div>
-                                <div class="claim">2 Claimed</div>
-                                <br/>
-                                <img src="/images/sample/me_annie_noah.jpg" width="180"/>
-                                <span class="delivery">Estimated Delivery: Mar 2013</span>
-                            </div>
-                            <!-- end reward -->
-
-                            <!-- begin reward -->
-                            <div class="reward">
-                                <h3 class="title">Donate $25</h3>
-                                <span class="description">Digital download of the finished film, Sex After Kids postcard autographed by a member of the cast, a ring tone by the film&rsquo;s composer, plus everything above!</span><br/><br/>
-                                <div class="num">3. Reward </div>
-                                <div class="claim">12 Claimed</div>
-                                <br/>
-                                <img src="/images/sample/Trail in forest.jpg" width="180"/>
-                                <span class="delivery">Estimated Delivery: Jan 2013</span>
-                            </div>
-                            <!-- end reward -->
-			</div>
-
-                        <!-- end rewards div -->
+                <!--Start Main Container-->
+		<div class="mainContainer" style="width:940px; float:left;">
 
 			<div class="featuredBox details inner-col">
 				<?
@@ -377,6 +332,9 @@
 
 					<div class="fb-comments" data-href="<?=$thisURL?>" data-num-posts="2" data-width="340" style="overflow: auto;"></div>
 				</div>
+                        <!--script src="http://static.ak.fbcdn.net/connect.php/js/FB.Share" type="text/javascript"></script-->
+		<script src="http://connect.facebook.net/en_US/all.js#xfbml=1"></script>
+		<script src="http://static.ak.fbcdn.net/connect.php/js/FB.Share" type="text/javascript"></script>
 
 			</div>
 
@@ -403,10 +361,6 @@
 
 		  </div>
                         
-		<!--script src="http://static.ak.fbcdn.net/connect.php/js/FB.Share" type="text/javascript"></script-->
-		<script src="http://connect.facebook.net/en_US/all.js#xfbml=1"></script>
-		<script src="http://static.ak.fbcdn.net/connect.php/js/FB.Share" type="text/javascript"></script>
-
 
 <!-- hidden content for days left modal popup -->
 <div class="popup_block" id="daysLeftPopup">
@@ -420,6 +374,110 @@
 	</div>
 </div>
 
+                </div>
+		<!--End Main Container-->
+
+                <!-- changes added by Forrest Z.
+
+                        start rewards div -->
+                    <div class="reward-div">
+                        <!-- begin reward -->
+                        <div class="reward-details">
+                            <h3 class="title">Rewards</h3>
+                        </div>
+                        
+                        <!-- begin reward -->
+                        <div class="reward-details">
+                            <div class="reward img-box">
+                                <h3 class="title">Support $1</h3>
+                                <span class="description">Exclusive updates on the film sent directly to you!</span><br/><br/>
+                                    <a href="/rewards.php?id=<?=$projectID?>&reward=1&amount=1"><div class="num">1. Reward </div></a>
+                                    <div class="claim">2 Claimed</div>
+                                <br/>
+                                <img src="/images/sm_design_aspen.png" width="170"/>
+                            </div>
+                        </div>
+                        <!-- end reward -->
+
+                        <!-- begin reward -->
+                        <div class="reward-details">
+                            <div class="reward">
+                                <h3 class="title">Support $10</h3>
+                                <span class="description">Special thanks on our website and in the film’s end credits, exclusive updates, plus a digital poster e-mailed to you, and a sneak peek at a scene from the film!</span><br/><br/>
+                                <a href="/rewards.php?id=<?=$projectID?>&reward=2&amount=10"><div class="num">2. Reward </div></a>
+                                <div class="claim">2 Claimed</div>
+                                <br/>
+                                <img src="/images/sm_design_FON.png" width="170"/>
+                            </div>
+                        </div>
+                        <!-- end reward -->
+
+                        <!-- begin reward -->
+                        <div class="reward-details">
+                            <div class="reward">
+                                <h3 class="title">Support $25</h3>
+                                <span class="description">Digital download of the finished film, Sex After Kids postcard autographed by a member of the cast, a ring tone by the film&rsquo;s composer, plus everything above!</span><br/><br/>
+                                <a href="/rewards.php?id=<?=$projectID?>&reward=3&amount=25"><div class="num">3. Reward </div></a>
+                                <div class="claim">12 Claimed</div>
+                                <br/>
+                                <img src="/images/sm_design_biracy.png" width="170"/>
+                            </div>
+                        </div>
+                        <!-- end reward -->
+
+                        <!-- begin reward -->
+                        <div class="reward-details">
+                            <div class="reward">
+                                <h3 class="title">Support $50</h3>
+                                <span class="description">Exclusive updates on the film sent directly to you!</span><br/><br/>
+                                    <a href="/rewards.php?id=<?=$projectID?>&reward=4&amount=50"><div class="num">4. Reward </div></a>
+                                    <div class="claim">0 Claimed</div>
+                                <br/>
+                                <img src="/images/sm_design_chloe.png" width="170"/>
+                            </div>
+                        </div>
+                        <!-- end reward -->
+
+                        <!-- begin reward -->
+                        <div class="reward-details">
+                            <div class="reward">
+                                <h3 class="title">Support $100</h3>
+                                <span class="description">Special thanks on our website and in the film’s end credits, exclusive updates, plus a digital poster e-mailed to you, and a sneak peek at a scene from the film!</span><br/><br/>
+                                <a href="/rewards.php?id=<?=$projectID?>&reward=5&amount=100"><div class="num">5. Reward </div></a>
+                                <div class="claim">22 Claimed</div>
+                                <br/>
+                                <img src="/images/sm_design_cove.png" width="170"/>
+                            </div>
+                        </div>
+                        <!-- end reward -->
+
+                        <!-- begin reward -->
+                        <div class="reward-details">
+                            <div class="reward">
+                                <h3 class="title">Support $250</h3>
+                                <span class="description">Digital download of the finished film, Sex After Kids postcard autographed by a member of the cast, a ring tone by the film&rsquo;s composer, plus everything above!</span><br/><br/>
+                                <a href="/rewards.php?id=<?=$projectID?>&reward=6&amount=250"><div class="num">6. Reward </div></a>
+                                <div class="claim">7 Claimed</div>
+                                <br/>
+                                <img src="/images/sm_design_covelinksgolf.png" width="170"/>
+                            </div>
+                        </div>
+                        <!-- end reward -->
+
+                        <!-- begin reward -->
+                        <div class="reward-details">
+                            <div class="reward">
+                                <h3 class="title">Support $1000</h3>
+                                <span class="description">Special thanks on our website and in the film’s end credits, exclusive updates, plus a digital poster e-mailed to you, and a sneak peek at a scene from the film!</span><br/><br/>
+                                <a href="/rewards.php?id=<?=$projectID?>&reward=7&amount=1000"><div class="num">7. Reward </div></a>
+                                <div class="claim">0 Claimed</div>
+                                <br/>
+                                <img src="/images/sm_design_georgies.png" width="170"/>
+                            </div>
+                        </div>
+                        <!-- end reward -->
+                    </div>
+                    <!-- end rewards div -->
 <?
 	include("footer.php");
 ?>

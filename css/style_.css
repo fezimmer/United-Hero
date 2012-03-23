@@ -564,17 +564,40 @@ div.searchPanl_main {
 	overflow-y: auto;
 	overflow-x: hidden;
 }
-.reward-details {
-	width:196px;
-	float:right;
+.project-details2 {
+	width:325px;
+        height: auto;
+        float:right;
 	padding:10px;
-	margin: 10px 0 0 0;
+        margin: 10px 0 0 10px;
 	background-color: #FFF;
 	-moz-border-radius:5px;
 	-webkit-border-radius:5px;
 	border-radius:5px;
 	overflow-y: auto;
 	overflow-x: hidden;
+}
+.reward-div{
+        width:216px;
+	float:right;
+        height: 1339px !important;
+        overflow-y: scroll;
+	overflow-x: hidden;
+}
+
+.reward-div .title{
+        text-align:center;
+        padding:10px;
+}
+.reward-details {
+        width: 190px;
+        float:left;
+        padding:0 0 0 5px;
+	margin:10px 0 0 0;
+	background-color: #FFF;
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	border-radius:5px;
 }
 .project-details .title {
 	color:#333;
@@ -587,10 +610,11 @@ div.searchPanl_main {
 	font-weight:bold;
 }
 .reward {
-        width: 180px;
+        padding-left:8px;
+        padding-right:8px;
         margin:auto;
-        padding-top: 10px;
-        padding-bottom: 20px;
+        padding-top: 0px;
+        padding-bottom: 10px;
 }
 .reward .title{
         font-weight: bold;
@@ -604,6 +628,18 @@ div.searchPanl_main {
         padding-bottom: 5px;
 }
 .reward .num {
+        background-color: #F8D100;
+        -moz-border-radius:5px;
+	-webkit-border-radius:5px;
+        color:white;
+        font-size:14px;
+        padding: 5px;
+        float: left;
+}
+.reward .num:hover {
+        background:#EAC101;
+}
+.reward .boxNum {
         background-color: #F8D100;
         -moz-border-radius:5px;
 	-webkit-border-radius:5px;
@@ -636,7 +672,17 @@ div.searchPanl_main {
 .hover a:hover{
 color:#000;
 }
-
+.rewardsPage {
+        float:left;
+	padding:10px;
+	margin: 10px 0 0 0;
+	background-color: #FFF;
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	border-radius:5px;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
 .project-details .project-cta a.support, .project-cta a.support {
 	margin-top:10px;
 	display:block;
@@ -2928,7 +2974,7 @@ background: url('../images/start-project-btn.png') no-repeat;
 }
 
 #create-project{
-widht:910px;
+width:910px;
 
 }
 
