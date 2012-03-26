@@ -1,42 +1,16 @@
-<?
-	$featuredProjectInfo = qr("SELECT pkProjectID, fldTitle, fldDescription, fldLocation, fldDesiredFundingAmount, fldVideoHTML, fldTags, fldStatus, fldActualFunding, fldDateCreated, fldImage, fkUserID FROM tblProject WHERE fldFeatured = 1 LIMIT 1");
-	if ($featuredProjectInfo){
-		extract($featuredProjectInfo);
-
-		$percentComplete = number_format(($fldActualFunding / $fldDesiredFundingAmount),2) * 100;
-		$fldDesiredFundingAmount 	= to_money($fldDesiredFundingAmount);
-		$fldActualFunding			= to_money($fldActualFunding);
-
-		$timeRemaining = getTimeRemaining($pkProjectID);
-		$daysRemaining = $timeRemaining['days'];
-
-		$submittedByInfo 	= qr("SELECT fldFName, fldLName, fldUsername, fldEmail, fldPhone, fldZip, fldSignupDate, fldIPAddress, fldType, fldActive, fldLastLogin FROM tblUser WHERE pkUserID = $fkUserID");
-		extract($submittedByInfo);
-
-		if (strlen($fldDescription) > 170){
-			$fldDescription = substr($fldDescription, 0, 170) . "...";
-		}
-
-?>
-
-<link rel="stylesheet" type="text/css" media="all" href="css/rewards.css" />
 
 <script language="javascript" type="text/javascript">
-	$(document).ready(function() {
-            var rewardNum = 2;
-
-
-		$("a.remove").click(function(){
-			$(this).parent().remove();
-			return false;
-		});
+	var rewardNum = 1;
+        var rewardsLeft = 7;
+        $(document).ready(function() {
+   
 		$("a#addlink").click(function(){
 
-                    if(rewardNum <= 8){
+                    if(rewardNum <= rewardsLeft){
 
 		$("#linkList").append("<!-- begin reward -->" +
-                "<div class='reward-details'>" +
-                "    <span style='text-align: center'><p><strong>Reward " + rewardNum + "</strong></p></span>" +
+                "<div class='reward-details' id='r" + rewardNum + "'>" +
+                "    <div style='width:47%;float:right;'><a href='#' onclick='removeReward(\"r" + rewardNum + "\")'>Click to Remove&nbsp;&nbsp;</a></div>" +
                 "    Title*<br/>" +
                 "    <input type='text' name='rewardTitle" + rewardNum + "' id='rewardTitle" + rewardNum + "' size='23'/><br/><br/>" +
                 "    <textarea name='rewardDesc" + rewardNum + "' id='rewardDesc" + rewardNum + "' cols='23' rows='5'>Reward Description*</textarea><br/><br/>" +
@@ -83,8 +57,8 @@
                 "    Image Upload" +
                 "    <input type='file' name='rewardImage" + rewardNum + "' id='rewardImage" + rewardNum + "'/><br/>" +
                 "</div>" +
-                "<!-- end reward " + rewardNum++ +"-->");
-
+                "<!-- end reward -->");
+                        rewardNum++;
                     }else{
                         alert("Maximum Rewards reached");
                     }
@@ -97,6 +71,11 @@
         } else {
             document.getElementById(id2).style.display = 'none';
         }
+    }
+
+    function removeReward(id){
+        document.getElementById(id).parentNode.removeChild(document.getElementById(id));
+        rewardsLeft++;
     }
     /*
     function confSubmit(form){
@@ -122,43 +101,8 @@
     */
 </script>
 
-<!--
-
- <!-- start rewards section
-                                 <div class="links">
-                                    <p><b>Add Rewards</b>Rewards are a way of giving back to your supporters adding incentives for those individuals to support your project.</p>
-
-                                    <div class='linkRow'>
-                                        <h3 class='title'>1. Reward</h3><br/>
-                                        <p><b>Image Upload</b> Upload an image to your project</p>
-                                        <input name='rewardImage<?=$index?>' type='file'/>
-                                            <?if($rewardImage != ""){?><span style='margin-left:15px;'>Currently: <img src='/magick.php/<?=$fldImage?>' alt='REWARD IMAGE' height='35'/></span><?}?>
-                                        <b>Support Amount</b><br/>
-
-                                        <b>Description</b>
-                                        <textarea name='rewardAmount<?=$index?>' type='text' cols='35' rows='4'/>
-                                        <div class=""></div>
-                                    </div>
-
-                                    <div id='linkList'>
-                                        <?/*
-                                            $files = q("SELECT pkResourceID, fldFilename, fldTitle FROM tblResource WHERE fkPageID = $pageID ORDER BY fldSortOrder");
-                                            foreach ($files as $file){
-                                                    $pkResourceID 	= $file['pkResourceID'];
-                                                    $fileFilename 	= $file['fldFilename'];
-                                                    $fileTitle 		= htmlspecialchars($file['fldTitle']);
-
-                                                    echo "<p class='linkRow'><a href='#' class='handle'></a> <input type='hidden' name='pkResourceID[]' value='$pkResourceID' id='pkResourceId-".$pkResourceID."'/> <input type='text' size='30' name='fileFilename[]' value=\"$fileFilename\" readonly id='fileFilename-".$pkResourceID."' /> <input name=\"fileFileTitle[]\" value=\"$fileTitle\" size='40' id='fileFileTitle-".$pkResourceID."' /> [<a href=\"/files/$fileFilename\" target=\"_new\" id='view-".$pkResourceID."'>view</a>] <a href=\"javascript:confirmDelete('file', '?action=deleteFile&resourceID=$pkResourceID&pageID=$pageID');\" id='del-".$pkResourceID."' >Delete this file</a></p>\n";
-                                            }
-                                        */?>
-
-                                    </div>
-
-				    <br class="clearBoth" />
-				    <p><a href="#" id="addlink">Add another Reward</a></p>
-				    <br class="clearBoth" />
-				 </div>
-                                 <!-- end rewards section -->
+ <!-- start rewards section -->
+                                 
 	<div class="reward-div">
 		<div class="reward-details">
 			<h3 class="title">Rewards</h3>
@@ -167,6 +111,7 @@
             <div id="linkList">
 
                 <!-- begin reward -->
+                <!--
                 <div class='reward-details'>
                     <span style='text-align: center'><p><strong>Reward 1</strong></p></span>
                     Title*<br/>
@@ -214,7 +159,7 @@
                     <br/><br/>
                     Image Upload
                     <input type='file' name='rewardImage1' id='rewardImage1'/><br/>
-                </div>
+                </div>-->
                 <!-- end reward -->
 
             </div>
@@ -222,4 +167,4 @@
                 <h3 class="title"><a href="#" id="addlink">Add New Reward</a></h3>
             </div>
 	</div>
-<?	}?>
+ <!-- end rewards section -->
