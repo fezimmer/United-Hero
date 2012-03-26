@@ -111,36 +111,6 @@
 
 ?>
 
-<script>
-	$(document).ready(function() {
-
-
-		$("a.remove").click(function(){
-			$(this).parent().remove();
-			return false;
-		});
-		$("a#addlink").click(function(){
-
-		$("#linkList").append("<p class='linkRow'><a href='#' class='handle'></a><input type='file' name='fldFilename[]' /><input name='fldFileTitle[]' size='40' /></p>");
-
-		});
-
-		$('div#linkList').Sortable({
-				accept : 		'linkRow',
-				helperclass : 	'sorthelper',
-				activeclass : 	'sortableactive',
-				hoverclass : 	'sortablehover',
-				opacity: 		0.8,
-				fx:				200,
-				axis:			'vertically',
-				opacity:		0.4,
-				revert:			true,
-				handle: 		'a.handle'
-		});
-
-	 });
-</script>
-
 		<div>
 			<div style="clear: both;"></div>
 			<div class="search-results-info">
@@ -213,44 +183,7 @@
 				    </div>
 					<!-- end inner div -->
 				</div>
-
-                        <!-- start rewards section -->
-                                 <div class="links">
-                                    <p><b>Add Rewards</b>Rewards are a way of giving back to your supporters adding incentives for those individuals to support your project.</p>
-
-                                    <div class='linkRow'>
-                                        <h3 class='title'>1. Reward</h3><br/>
-                                        <p><b>Image Upload</b> Upload an image to your project</p>
-                                        <input name='rewardImage<?=$index?>' type='file'/>
-                                            <?if($rewardImage != ""){?><span style='margin-left:15px;'>Currently: <img src='/magick.php/<?=$fldImage?>' alt='REWARD IMAGE' height='35'/></span><?}?>
-                                        <b>Support Amount</b><br/>
-
-                                        <b>Description</b>
-                                        <textarea name='rewardAmount<?=$index?>' type='text' cols='35' rows='4'/>
-                                        <div class=""></div>
-                                    </div>
-
-                                    <div id='linkList'>
-                                        <?/*
-                                            $files = q("SELECT pkResourceID, fldFilename, fldTitle FROM tblResource WHERE fkPageID = $pageID ORDER BY fldSortOrder");
-                                            foreach ($files as $file){
-                                                    $pkResourceID 	= $file['pkResourceID'];
-                                                    $fileFilename 	= $file['fldFilename'];
-                                                    $fileTitle 		= htmlspecialchars($file['fldTitle']);
-
-                                                    echo "<p class='linkRow'><a href='#' class='handle'></a> <input type='hidden' name='pkResourceID[]' value='$pkResourceID' id='pkResourceId-".$pkResourceID."'/> <input type='text' size='30' name='fileFilename[]' value=\"$fileFilename\" readonly id='fileFilename-".$pkResourceID."' /> <input name=\"fileFileTitle[]\" value=\"$fileTitle\" size='40' id='fileFileTitle-".$pkResourceID."' /> [<a href=\"/files/$fileFilename\" target=\"_new\" id='view-".$pkResourceID."'>view</a>] <a href=\"javascript:confirmDelete('file', '?action=deleteFile&resourceID=$pkResourceID&pageID=$pageID');\" id='del-".$pkResourceID."' >Delete this file</a></p>\n";
-                                            }
-                                        */?>
-
-                                    </div>
-
-				    <br class="clearBoth" />
-				    <p><a href="#" id="addlink">Add another Reward</a></p>
-				    <br class="clearBoth" />
-				 </div>
-                                 <!-- end rewards section -->
-
-			<? include('sidebar.inc.php');?>
+			<? include('rewards_sidebar.inc.php');?>
 			<div style="clear:both;"> </div>
 
 <?

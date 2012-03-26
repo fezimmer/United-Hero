@@ -10,6 +10,7 @@
 	<meta property="og:image" content="<? if ($metaImage) echo $metaImage; else echo "http://unitedhero.com/images/logo-sm.jpeg";?>" />
 
 	<link rel="stylesheet" type="text/css" media="all" href="css/style.css" />
+        <link rel="stylesheet" type="text/css" href="css/rewards.css" />
 	<link href="css/basic.css" type="text/css" rel="stylesheet" />
 	<link href="css/forms.css" rel="stylesheet" type="text/css" />
 	<link href="css/modal.css" type="text/css" rel="stylesheet" />

@@ -424,7 +424,7 @@
                         </div>
                             <!-- end reward -->
 
-                        <div class="rewardsPage" style="width:760px; float:left;">
+                        <div class="rewardsPage" style="width:772px; float:left;">
                             <a href="/project_test.php?id=<?=$projectID?>" style="padding-left:24px;">Return to Project page...</a>
                         </div>
                            

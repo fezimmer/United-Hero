@@ -1,0 +1,94 @@
+.reward-div{
+        width:223px;
+        min-height:2012px;
+        overflow-y:auto;
+	float:right;
+	overflow-x: hidden;
+}
+
+.reward-div .title{
+        text-align:center;
+        padding:10px;
+}
+.reward-details {
+        width: 218px;
+        float:left;
+        padding:5px 0 5px 5px;
+	margin:15px 0 0 0;
+	background-color: #FFF;
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	border-radius:5px;
+}
+.reward-details .title {
+	color:#333;
+	font-size:18px;
+	font-weight:bold;
+}
+.reward {
+        padding-left:8px;
+        padding-right:8px;
+        margin:auto;
+        padding-top: 0px;
+        padding-bottom: 10px;
+}
+.reward .title{
+        font-weight: bold;
+        font-size: 16px;
+        color:#333;
+        padding-bottom: 5px;
+}
+.reward .description {
+        font-size:14px;
+        color:#333;
+        padding-bottom: 5px;
+}
+.reward .num {
+        background-color: #F8D100;
+        -moz-border-radius:5px;
+	-webkit-border-radius:5px;
+        color:white;
+        font-size:14px;
+        padding: 5px;
+        float: left;
+}
+.reward .num:hover {
+        background:#EAC101;
+}
+.reward .boxNum {
+        background-color: #F8D100;
+        -moz-border-radius:5px;
+	-webkit-border-radius:5px;
+        color:white;
+        font-size:14px;
+        padding: 5px;
+        float: left;
+}
+.reward .claim {
+        background-image:none;
+        font-size:14px;
+        color:#333;
+        padding:5px;
+        margin-right:0px;
+        padding-left:0px;
+        float:right;
+        margin-bottom: 10px;
+}
+.reward .delivery {
+        font-size:10px;
+        color:#333;
+        padding:5px;
+        margin-left: 10px;
+}
+
+.rewardsPage {
+        float:left;
+	padding:10px;
+	margin: 10px 0 0 0;
+	background-color: #FFF;
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	border-radius:5px;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
