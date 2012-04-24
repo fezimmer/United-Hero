@@ -362,9 +362,8 @@
 <!-- hidden content for days left modal popup -->
 <div class="popup_block" id="daysLeftPopup">
 	<div style="margin: 5px;">
-		<p>If you do not get the funding goal amount in the time limit, the money goes back to
-		the supporters as a refund.</p>
-		<p>Please view our <a href="#?w=780" rel="guidelinesPopup" title="United Hero Dream/Project Guidelines" class="poplight">guidelines</a></p>
+		<p>Each Product has a limited amount of time, Browse Current Products, Reward yourself Today!</p>
+		<!--p>Please view our <a href="#?w=780" rel="guidelinesPopup" title="United Hero Dream/Project Guidelines" class="poplight">guidelines</a></p-->
 		<br />
 		<p>&nbsp;</p>
 		<button class="button button-gray btn-close">Close</button>

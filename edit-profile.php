@@ -8,6 +8,15 @@
 	$action = $_REQUEST['action'];
 	if ($action == 'updateProfile'){
 		extract($_POST);
+
+		if ($fldPassword != "" && $fldPassword2 != "" && ($fldPassword == $fldPassword2)){
+			$success = qr("UPDATE tblUser SET fldPassword = \"$fldPassword\" WHERE pkUserID = $userID");
+			if ($success){
+				$report_msg[] = "Your password was successfully changed.";
+				$passwordChanged = true;
+			}
+		}
+
 		$success = qr("UPDATE tblUser SET
 						fldEmail 	= \"$fldEmail\",
 						fldPhone	= \"$fldPhone\",
@@ -21,16 +30,10 @@
 			$report_msg[] = "Your profile was successfully updated.";
 		}
 		else{
-			$error_msg[] = "There was an error updating your profile. Did you change anything?";
-		}
-
-		if ($fldPassword != "" && $fldPassword2 != "" && ($fldPassword == $fldPassword2)){
-			$success = qr("UPDATE tblUser SET fldPassword = \"$fldPassword\" WHERE pkUserID = $userID");
-			if ($success){
-				$report_msg[] = "Your password was successfully changed.";
+			if (!$passwordChanged){
+				$error_msg[] = "There was an error updating your profile. Did you change anything?";
 			}
 		}
-
 	}
 
 

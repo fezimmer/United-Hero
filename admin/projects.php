@@ -10,6 +10,9 @@
     ##
 
     $tblProject = new ajaxCRUD("Project", "tblProject", "pkProjectID");
+    
+    //new class for rewards
+    $tblRewards = new ajaxCRUD("Reward", "tblRewards", "pkRewardID");
 
     ##
     ########################################################
@@ -20,6 +23,10 @@
     #the first field is the fk in the table, the second is the second table, the third is the pk in the second table, and the forth is the field you want to retrieve as the dropdown value
     //$tblProject->defineRelationship("fkUserID", "tblUser", "pkUserID", "CONCAT(fldFName, ' ', fldLName)", "fldFName");
     $tblProject->formatFieldWithFunction("fkUserID", "formatUser");
+
+    //relationship of rewards to project
+    //$tblRewards->formatFieldWithFunction("fkUserID", "formatUser");
+
 
     //$tblProject->omitPrimaryKey();
 
@@ -70,6 +77,7 @@
 	    	$h1 = "You are viewing all <u>unapproved</u> projects (not active on site).";
 	    }
 	}
+if ($show != "rewards"){
 
     if ($show != 'new'){
     	//only show add form on "New Projects" page
@@ -82,6 +90,7 @@
 
 	//show the 'view project' button on all pages (todo: may need to flush out better requirements on when to show this button)
 	$tblProject->addButtonToRow("View Project", "../project.php");
+        $tblProject->addButtonToRow("View Supported Rewards" , "projects.php?show=rewards");
 
 	$tblProject->omitAddField("fldFeatured");
 	$tblProject->omitAddField("fldActualFunding");
@@ -90,8 +99,8 @@
 	$tblProject->omitAddField("fldProjectApprover");
 
     $tblProject->addValueOnInsert("fldDateCreated", "NOW()");
-
-    $tblProject->addWhereClause($where_condition);
+    
+        $tblProject->addWhereClause($where_condition);
 
 	$numRows = $tblProject->getNumRows();
 
@@ -113,7 +122,7 @@
     	$tblProject->addAjaxFilterBox("fldTitle");
     	$tblProject->addAjaxFilterBox("fldTags");
     	$tblProject->addAjaxFilterBox("fldStatus");
-    }
+        }
 
     $tblProject->setTextareaHeight("fldDescription", 150);
 
@@ -165,8 +174,41 @@
     $tblProject->formatFieldWithFunction("fldStatus", "displayStatus");
 
 	$tblProject->formatFieldWithFunctionAdvanced("fldEndDate", "displayEndDate");
-
+}
 	include("header.php");
+
+    //rewards section
+    if ($show == "rewards"){
+            $reward_where_condition = "WHERE fkPaymentID > \"0\"";
+            $h1 = "You are viewing all <u>supported rewards</u> projects.";
+
+            $tblRewards->omitPrimaryKey();
+            $tblRewards->addWhereClause($reward_where_condition);
+            $tblRewards->displayAs("fldTitle", "Title");
+            $tblRewards->displayAs("fldDescription", "Description");
+            $tblRewards->displayAs("fldSupport", "Support");
+            $tblRewards->displayAs("fldNumAvailable", "Number Available");
+            $tblRewards->displayAs("fldRewardMonth", "Delivery Month");
+            $tblRewards->displayAs("fldRewardYear", "Delivery Year");
+            $tblRewards->displayAs("fkPaymentID", "Payment Identifier");
+            $tblRewards->displayAs("fkProjectID", "Project");
+            $tblRewards->displayAs("fldStreetAddress", "Street Address");
+            $tblRewards->displayAs("fldCity", "City");
+            $tblRewards->displayAs("fldState", "State");
+            $tblRewards->displayAs("fldZipCode", "Zip");
+            $tblRewards->displayAs("fldName", "Name");
+            $tblRewards->omitField("fldRewardsLeft");
+            $tblRewards->omitField("fldImage");
+            $tblRewards->omitField("fldNumAvailable");
+            $tblRewards->addAjaxFilterBox("fldTitle");
+            $tblRewards->addAjaxFilterBox("fldRewardMonth");
+            $tblRewards->addAjaxFilterBox("fldRewardYear");
+            $tblRewards->addAjaxFilterBox("fkPaymentID");
+            $tblRewards->addAjaxFilterBox("fkProjectID");
+            $tblRewards->disallowAdd();
+            $tblRewards->disallowDelete();
+            $tblRewards->showTable();
+    }
 
 	$viewBreakdown = $_REQUEST['viewBreakdown'];
 	if ($viewBreakdown){
@@ -197,9 +239,10 @@
 		echo "<br /><br /><hr /><br />\n";
 	}
 
-
 	#show project table
-	$tblProject->showTable();
+        if ($show != "rewards"){
+            $tblProject->showTable();
+        }
 
     include("footer.php");
 

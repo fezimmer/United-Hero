@@ -1,15 +1,171 @@
 <?
-	//function developed by Forrest Z. of LCM for rewards.php file
+	//functions developed by LCM for rewards feature
         //serves to validate that a reward has been selected
         function rewardIsSelected($rewards){
             foreach ($rewards as $reward){
-                if($reward == "Claimed"){
+                if($reward != ""){
                     return true;
                 }
             }
             return false;
         }
 
+        //counts rewards based off either title, description, support, or image being provided
+        function rewardCount($title, $description, $support, $image, $deletion){
+            $fcount = 1;
+            $count = 1;
+            foreach($title as $x){
+                if($x != "" && $x != null){
+                    $count++;
+                }
+            }
+            if($count > $fcount){
+                $fcount = $count;
+            }
+            $count = 1;
+            foreach($description as $x){
+                if($x != "" && $x != null){
+                    $count++;
+                }
+            }
+            if($count > $fcount){
+                $fcount = $count;
+            }
+            $count = 1;
+            foreach($support as $x){
+                if($x != "" && $x != null){
+                    $count++;
+                }
+            }
+            if($count > $fcount){
+                $fcount = $count;
+            }
+            $count = 1;
+            foreach($image as $x){
+                if($x != "" && $x != null){
+                    $count++;
+                }
+            }
+            if($count > $fcount){
+                $fcount = $count;
+            }
+            return $fcount;
+        }
+
+        //reward validation
+        function checkRewards($finalCount, $rewardsTitle, $rewardsDesc, $rewardsAvail, $rewardsSupport, $rewardsMonth, $rewardsYear){
+            $errors = array();
+            for($i=1; $i<$finalCount; $i++){
+                if($rewardsTitle[$i] == null){
+                    $errors[] = "Title cannot be blank";
+                    break;
+                }
+            }
+            for($i=1; $i<$finalCount; $i++){
+                if($rewardsDesc[$i] == null){
+                    $errors[] = "Description cannot be blank";
+                    break;
+                }
+            }
+            for($i=1; $i<$finalCount; $i++){
+                if($rewardsAvail[$i] != null){
+                    if(!is_numeric($rewardsAvail[$i])){
+                        $errors[] = "Limit must be an integer";
+                        break;
+                    }else if($rewardsAvail[$i] < 1){
+                        $errors[] = "minimum Limit Amount is 1";
+                        break;
+                    }
+                }
+            }
+            for($i=1; $i<$finalCount; $i++){
+                if($rewardsSupport[$i] != null){
+                    if(!is_numeric($rewardsSupport[$i])){
+                        $errors[] = "Support must be an integer";
+                        break;
+                    }else if($rewardsSupport[$i] < 1){
+                        $errors[] = "minimum Support Amount is $1";
+                        break;
+                    }
+                }else if($rewardsSupport[$i] == null){
+                    $errors[] = "Support cannot be blank";
+                    break;
+                }
+            }
+            for($i=1; $i<$finalCount; $i++){
+                if($rewardsMonth[$i] == ""){
+                    $errors[] = "Delivery Month not selected";
+                    break;
+                }
+            }
+            for($i=1; $i<$finalCount; $i++){
+                if($rewardsYear[$i] == ""){
+                    $errors[] = "Delivery Year not selected";
+                    break;
+                }
+            }
+            return $errors;
+        }
+        //end LCM functions
+
+        function getRewardMonth($val){
+            if($val == "01"){
+                return "JANUARY (01)";
+            }elseif($val == "02"){
+                return "FEBRUARY (02)";
+            }elseif($val == "03"){
+                return "MARCH (03)";
+            }elseif($val == "04"){
+                return "APRIL (04)";
+            }elseif($val == "05"){
+                return "MAY (05)";
+            }elseif($val == "06"){
+                return "JUNE (06)";
+            }elseif($val == "07"){
+                return "JULY (07)";
+            }elseif($val == "08"){
+                return "AUGUST (08)";
+            }elseif($val == "09"){
+                return "SEPTEMBER (09)";
+            }elseif($val == "10"){
+                return "OCTOBER (10)";
+            }elseif($val == "11"){
+                return "NOVEMBER (11)";
+            }elseif($val == "12"){
+                return "DECEMBER (12)";
+            }else{
+                return "Delivery Month*";
+            }
+        }
+
+        function getMonthForReward($val){
+            if($val == "01"){
+                return "Jan";
+            }elseif($val == "02"){
+                return "Feb";
+            }elseif($val == "03"){
+                return "Mar";
+            }elseif($val == "04"){
+                return "Apr";
+            }elseif($val == "05"){
+                return "May";
+            }elseif($val == "06"){
+                return "Jun";
+            }elseif($val == "07"){
+                return "Jul";
+            }elseif($val == "08"){
+                return "Aug";
+            }elseif($val == "09"){
+                return "Sep";
+            }elseif($val == "10"){
+                return "Oct";
+            }elseif($val == "11"){
+                return "Nov";
+            }else{
+                return "Dec";
+            }
+        }
+        
         function getTimeRemaining($projectID){
 		$projCreateDate = q1("SELECT fldDateCreated FROM tblProject WHERE pkProjectID = $projectID");
 		$projEndDate = q1("SELECT fldEndDate FROM tblProject WHERE pkProjectID = $projectID");

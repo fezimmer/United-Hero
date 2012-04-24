@@ -42,8 +42,7 @@
 					</div>
 
 					<div class="project-cta">
-
-						<a href="/project.php?id=<?=$pkProjectID?>&support=yes" class="support" style="margin-left: 10px; font-size: 19px; width:185px;">Support this Project</a>
+						<a href="/project.php?id=<?=$pkProjectID?>&support=yes" class="support" style="margin-left: 10px; font-size: 19px; width:185px;">Support this Product</a>
 					</div>
 					<!--div class="desc">
 						Ut enim ad minim veniam, quis nostrud exercitation ullamco

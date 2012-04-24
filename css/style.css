@@ -2,7 +2,7 @@
 body {
 	margin:0;
 	padding:0;
-	
+
 	background:#e6e7e9;
 	font-family:Helvetica, Arial, sans-serif, "Arial Narrow";
 	font-size:12px;
@@ -20,7 +20,7 @@ input, textarea {
 }
 a, a:link, a:visited, a:active{
 	text-decoration: none;
-	
+
 	color:#2795D4;
 }
 a:hover {
@@ -765,7 +765,7 @@ padding-top:7px;
 }
 
 .progress-bar {
-	
+
 	height: 10px;
 	-moz-border-radius:5px;
 	-webkit-border-radius:5px;
@@ -2871,3 +2871,6 @@ widht:910px;
 
 }
 
+.blue{
+	color:#2795D4;
+}

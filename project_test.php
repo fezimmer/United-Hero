@@ -361,13 +361,18 @@
 
 		  </div>
                         
+		<!--script src="http://static.ak.fbcdn.net/connect.php/js/FB.Share" type="text/javascript"></script-->
+		<script src="http://connect.facebook.net/en_US/all.js#xfbml=1"></script>
+		<script src="http://static.ak.fbcdn.net/connect.php/js/FB.Share" type="text/javascript"></script>
+
 
 <!-- hidden content for days left modal popup -->
 <div class="popup_block" id="daysLeftPopup">
 	<div style="margin: 5px;">
-		<p>If you do not get the funding goal amount in the time limit, the money goes back to
-		the supporters as a refund.</p>
-		<p>Please view our <a href="#?w=780" rel="guidelinesPopup" title="United Hero Dream/Project Guidelines" class="poplight">guidelines</a></p>
+
+
+		<p>Each Product has a limited amount of time, Browse Current Products, Reward yourself Today!</p>
+		<!--p>Please view our <a href="#?w=780" rel="guidelinesPopup" title="United Hero Dream/Project Guidelines" class="poplight">guidelines</a></p-->
 		<br />
 		<p>&nbsp;</p>
 		<button class="button button-gray btn-close">Close</button>
@@ -377,105 +382,61 @@
                 </div>
 		<!--End Main Container-->
 
-                <!-- changes added by Forrest Z.
+                <!-- changes added by Forrest Z.-->
 
-                        start rewards div -->
+
+                <script language="javascript" type="text/javascript">
+                    function checkReward(id, projectId, rewardId){
+                        if( document.getElementById(id).value == "0"){
+                            alert("Sorry, all rewards of type have been claimed.");
+                        }else{
+                            window.location = "/rewards.php?id=" + projectId + "&reward=" + rewardId;
+                        }
+                    }
+                </script>
+                        <!--start rewards div -->
                     <div class="reward-div">
                         <!-- begin reward -->
                         <div class="reward-details">
                             <h3 class="title">Rewards</h3>
                         </div>
-                        
-                        <!-- begin reward -->
+                        <?
+                            $rewards = q("SELECT * FROM tblRewards WHERE fkProjectID = \"$projectID\" AND fkPaymentID <= \"0\" ORDER BY pkRewardID");
+                            $count = 1;
+                            foreach ($rewards as $reward){
+                        ?>
+                        <!-- begin reward <?=$count?> -->
                         <div class="reward-details">
                             <div class="reward img-box">
-                                <h3 class="title">Support $1</h3>
-                                <span class="description">Exclusive updates on the film sent directly to you!</span><br/><br/>
-                                    <a href="/rewards.php?id=<?=$projectID?>&reward=1&amount=1"><div class="num">1. Reward </div></a>
-                                    <div class="claim">2 Claimed</div>
-                                <br/>
-                                <img src="/images/sm_design_aspen.png" width="170"/>
+                                <h3 class="title"><?=$reward['fldTitle']?></h3>
+                                <span class="description"><?=$reward['fldDescription']?></span><br/><br/>
+                                <a onclick="checkReward('hiddenReward<?=$count?>', '<?=$projectID?>', '<?=$reward['pkRewardID']?>')" href="#"><div class="num"><?=$count?>. Reward </div></a>
+                                <div class="claim">
+                                <?
+                                if($reward['fldNumAvailable'] != 0){
+                                    if($reward['fldRewardsLeft'] == 0){
+                                        echo "SOLD OUT";
+                                    }else{
+                                        echo ($reward['fldNumAvailable'] - $reward['fldRewardsLeft']) . " Claimed";
+                                    }
+                                }else{
+                                    $title = $reward['fldTitle'];
+                                    $num = q1("SELECT COUNT(*) FROM tblRewards WHERE fkProjectID = \"$projectID\" AND fkPaymentID > \"0\" AND fldTitle = \"$title\"");
+                                    echo $num . " Claimed";
+                                }
+                                ?>
+                                </div><br/>
+                                <?if($reward['fldImage'] != ""){?>
+                                <img src="/magick.php/<?=$reward['fldImage']?>?resize(170)" alt="REWARD IMAGE <?=$count?>"/>
+                                <?}?>
                             </div>
+                            <input type="hidden" id="hiddenReward<?=$count?>" value="<?if($reward['fldNumAvailable'] != 0){ echo $reward['fldRewardsLeft']; }?>"/>
                         </div>
                         <!-- end reward -->
-
-                        <!-- begin reward -->
-                        <div class="reward-details">
-                            <div class="reward">
-                                <h3 class="title">Support $10</h3>
-                                <span class="description">Special thanks on our website and in the film’s end credits, exclusive updates, plus a digital poster e-mailed to you, and a sneak peek at a scene from the film!</span><br/><br/>
-                                <a href="/rewards.php?id=<?=$projectID?>&reward=2&amount=10"><div class="num">2. Reward </div></a>
-                                <div class="claim">2 Claimed</div>
-                                <br/>
-                                <img src="/images/sm_design_FON.png" width="170"/>
-                            </div>
-                        </div>
-                        <!-- end reward -->
-
-                        <!-- begin reward -->
-                        <div class="reward-details">
-                            <div class="reward">
-                                <h3 class="title">Support $25</h3>
-                                <span class="description">Digital download of the finished film, Sex After Kids postcard autographed by a member of the cast, a ring tone by the film&rsquo;s composer, plus everything above!</span><br/><br/>
-                                <a href="/rewards.php?id=<?=$projectID?>&reward=3&amount=25"><div class="num">3. Reward </div></a>
-                                <div class="claim">12 Claimed</div>
-                                <br/>
-                                <img src="/images/sm_design_biracy.png" width="170"/>
-                            </div>
-                        </div>
-                        <!-- end reward -->
-
-                        <!-- begin reward -->
-                        <div class="reward-details">
-                            <div class="reward">
-                                <h3 class="title">Support $50</h3>
-                                <span class="description">Exclusive updates on the film sent directly to you!</span><br/><br/>
-                                    <a href="/rewards.php?id=<?=$projectID?>&reward=4&amount=50"><div class="num">4. Reward </div></a>
-                                    <div class="claim">0 Claimed</div>
-                                <br/>
-                                <img src="/images/sm_design_chloe.png" width="170"/>
-                            </div>
-                        </div>
-                        <!-- end reward -->
-
-                        <!-- begin reward -->
-                        <div class="reward-details">
-                            <div class="reward">
-                                <h3 class="title">Support $100</h3>
-                                <span class="description">Special thanks on our website and in the film’s end credits, exclusive updates, plus a digital poster e-mailed to you, and a sneak peek at a scene from the film!</span><br/><br/>
-                                <a href="/rewards.php?id=<?=$projectID?>&reward=5&amount=100"><div class="num">5. Reward </div></a>
-                                <div class="claim">22 Claimed</div>
-                                <br/>
-                                <img src="/images/sm_design_cove.png" width="170"/>
-                            </div>
-                        </div>
-                        <!-- end reward -->
-
-                        <!-- begin reward -->
-                        <div class="reward-details">
-                            <div class="reward">
-                                <h3 class="title">Support $250</h3>
-                                <span class="description">Digital download of the finished film, Sex After Kids postcard autographed by a member of the cast, a ring tone by the film&rsquo;s composer, plus everything above!</span><br/><br/>
-                                <a href="/rewards.php?id=<?=$projectID?>&reward=6&amount=250"><div class="num">6. Reward </div></a>
-                                <div class="claim">7 Claimed</div>
-                                <br/>
-                                <img src="/images/sm_design_covelinksgolf.png" width="170"/>
-                            </div>
-                        </div>
-                        <!-- end reward -->
-
-                        <!-- begin reward -->
-                        <div class="reward-details">
-                            <div class="reward">
-                                <h3 class="title">Support $1000</h3>
-                                <span class="description">Special thanks on our website and in the film’s end credits, exclusive updates, plus a digital poster e-mailed to you, and a sneak peek at a scene from the film!</span><br/><br/>
-                                <a href="/rewards.php?id=<?=$projectID?>&reward=7&amount=1000"><div class="num">7. Reward </div></a>
-                                <div class="claim">0 Claimed</div>
-                                <br/>
-                                <img src="/images/sm_design_georgies.png" width="170"/>
-                            </div>
-                        </div>
-                        <!-- end reward -->
+                        <?
+                                $count++;
+                            }
+                        ?>
                     </div>
                     <!-- end rewards div -->
 <?

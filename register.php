@@ -54,7 +54,7 @@
 		/* Everything has passed both error checks that we have done.*/
 		if(count($error_msg) == 0){
 
-			$fldActive = 0;
+			$fldActive = 1;
 			$type = "user"; //only type for right now
 			// Insert info into tblUser table.
 			$success = qr("INSERT INTO tblUser (fldFName, fldLName, fldUsername, fldPassword, fldEmail, fldPhone, fldZip, fldSignupDate, fldIPAddress, fldType, fldActive) VALUES(\"$fldFName\", \"$fldLName\", \"$fldUsername\", \"$fldPassword\", \"$fldEmail\", \"$fldPhone\", \"$fldZip\", NOW(), \"$IP_Address\", \"$type\", $fldActive)");
@@ -65,9 +65,10 @@
 			else {
 				$the_user_id = mysql_insert_id();
 
-				//first time creation of the account / no landlord invite
+				//first time creation of the account
 				if ($fldActive == 0){
 					if ($success){
+						/* commenting out activation email and process
 						//make activation code for user and insert into table
 						$activation_code = $the_user_id . "-" . get_rand_char(12);
 						qr("INSERT INTO tblUser_Activation (fkUserID, fldCode) VALUES($the_user_id, '$activation_code')");
@@ -92,6 +93,21 @@
 						//show congrats and how to activate on login page
 						$hide_form = true;
 						$report_msg[] = "<h1>Thank You for Registering!</h1><p>Your account is <b><u>not</u></b> yet active. To <b>Activate Your Account</b>, check your email and click on the activation link inside.</p><p>If you need help email us at <strong> <a href=\"mailto:" . $globals[contact_email] . "\">" . $globals[contact_email] . "</a>.</strong>\n";
+						*/
+
+						//send activation email
+						$email_template_params = array();
+						$email_template_params['USERNAME']  = $fldEmail;
+						$email_template_params['PASSWORD']  = $fldPassword;
+						$email_template_params['FULLNAME']  = $fldFullName;
+						$email_template_params['SITENAME']  = $globals[site_name];
+						$email_template_params['TOP-HEADER-TEXT']  = "This email is being sent from unitedhero.com. It requires your action.";
+
+						send_email_from_template("user_signup.html",$fldEmail,"Thank you so much for signing up for Harvard's Market at Unitedhero.com",$email_template_params, 1, $globals['emails_from']);
+
+						login_as($fldEmail, "fldEmail");
+						$full_name = $fldFName . " " . $fldLName;
+						header("Location: my_account.php?rep_msg=" . $full_name . ", you are now logged in.");
 					}
 					else{
 						$hide_form = false;

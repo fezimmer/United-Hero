@@ -18,6 +18,8 @@
 		$unfundedProjectCount = q1("SELECT COUNT(*) FROM tblProject WHERE fldStatus = \"unfunded\"");
 
 		$unapprovedProjectCount = q1("SELECT COUNT(*) FROM tblProject WHERE fldStatus = 'unapproved'");
+
+                $rewardCount = q1("SELECT COUNT(*) FROM tblRewards WHERE fkPaymentID > \"0\" ");
 ?>
 
 		<table width="90%"  border="0" align="center" cellpadding="0" cellspacing="0" bgcolor="#333333">
@@ -29,7 +31,7 @@
 				<td><a href="projects.php?show=funded" class="menu">Funded</a> (<?=$fundedProjectCount?>)</td>
 				<td><a href="projects.php?show=unfunded" class="menu">Un-funded</a> (<?=$unfundedProjectCount?>)</td>
 				<td><a href="projects.php?show=unapproved" class="menu">Unapproved</a> (<?=$unapprovedProjectCount?>)</td>
-				<td></td>
+				<td><a href="projects.php?show=rewards" class="menu">Supported Rewards</a> (<?=$rewardCount?>)</td>
 				<td><a href="users.php" class="menu">Project Creators</a></td>
 				<td><a href="messages.php" class="menu">Messages</a></td>
 				<td><a href="index.php?action=logout" class="menu">Logout</a></td>

@@ -73,11 +73,17 @@
 </div>
 <!--End Footer Section-->
 
+<style>
+	.bigBlue{
+		font-size: 1.3em;
+		color: #3366FF;
+	}
+</style>
 
 <!-- learnmore hidden content for modal popup -->
 <div class="popup_block" id="learnMorePopup">
 	<div style="margin: 5px;">
-		<p>
+		<!--p>
 			<b>UNITED HERO IS A GLOBAL FUNDING PLATFORM FOR EVERYONE!</b>&nbsp; What&nbsp;is your Dream? A surfer, artist or maybe a chef, Imagine taking that first step in the direction of your dreams with United Hero supplying the necessary tools. True breakthroughs are accomplished by releasing the explosion of your imagination, together we can do anything!<br />
 			&nbsp;
 		</p>
@@ -91,7 +97,21 @@
 			<br />
 			<b>NEW FUNDING TOOL</b>:&nbsp; Do you need funding for that new product or idea to test the market &nbsp;that will give you the ability to grow your business &nbsp;and hire people? That&#39;s a project yearning to be funded. Everyone is welcome here!&nbsp; <b>UNITED HERO</b> is here to help you, we would love to hear from you and invite your comments.<br />
 			&nbsp;&nbsp;&nbsp;
-		</p>
+		</p-->
+
+
+		<br /><p><span class="bigBlue">UNITED HERO IS PROUD TO PRESENT HARVARD'S MARKET</span>, <b><i>A FUNDING PLATFORM FOR CREATIVE PRODUCTS!</i></b> What are Creative Products? These are Products made by Creative People, anything that you can create out of raw materials or others mediums. With our Internet Street Fair your tied into social networks to expand your customer base. If you create it, you can sell it. Together we can accomplish your GOAL.</p>
+
+		<br />
+		<p><span class="bigBlue">PRODUCT CREATORS</span> Are people with <b>Dreams</b> so big that everyone around them knows what their <b>Dreams</b> are. <b><i>If you are passionate and have PRODUCTS  too good to keep to yourself,</p>
+		<p>Congratulations, UNITED HERO is for you!</b></i>  On the Home page click on <b>SELL YOUR PRODUCTS</b> button, that is your first step!</p>
+
+		<br />
+		<p><span class="bigBlue">SUPPORT FOR PRODUCTS</span> This is about supporting the very best ideas of our Friends and Family and other talented people. Every Product comes from the imagination of someone like you! Creative people change our lives everyday with Products like yours.</p>
+
+		<br />
+		<p><span class="bigBlue">NEW FUNDING TOOL</span> <b>A NEW TOOL TO FUND AND SUPPORT CREATIVE PRODUCTS. Use the SHARE and Like button and Facebook comments to increase your product exposure for greater sales!</b> Do you need funding for a creative product to test the market that will give you the ability to create a Revenue Stream? That's a product yearning to be funded. Everyone is welcome here!  UNITED HERO is here to help you, we would love to hear from you and invite your comments.</p>
+
 		<p>&nbsp;</p>
 		<button class="button button-gray btn-close">Close</button>
 	</div>
@@ -149,19 +169,80 @@
 
 		<form method="post" action="login.php" id="loginForm_form">
 			<p> <label>Email <span>*</span></label> <input id="login_email" tabindex="1" size="20" maxlength="100" type="text" name="login_email" value="" /> </p>
-			<p> <label>Password<span>*</span></label> <input id="login_password" type="password" name="login_password" value="" /> </p>
+			<p> <label>Password<span>*</span></label> <input id="login_password" tabindex="2" type="password" name="login_password" value="" /> </p>
 			<!--p class"terms"> <input type="checkbox" id="remember" style="float:left; width:13px; margin:0 10px 3px 0 " /> <label for="remember" style="width:330px">Remember me</label> </p-->
 
 			<div style="clear:both;"> </div>
 			<div class="action-buttons">
 				<button class="button button-gray btn-close">Cancel</button>
-				<button class="button button-blue btn-login" onClick="document.getElementById('loginForm_form').submit();">Login</button>
+				<button class="button button-blue btn-login" onClick="document.getElementById('loginForm_form').submit();" tabindex="3">Login</button>
 				<a href="/login.php#forgotPassword" class="forgot">Forgot my password</a>
 			</div>
 		</form>
     </div>
 
 </div>
+
+        <!-- allows the tab key to traverse login-form-->
+        <script type="text/javascript">
+        $(':input').keypress(function(e){
+
+            // if 'z' pressed
+            if (e.which == 9) {
+
+                // if we haven't stored the tabbing order
+                if (!this.form.tabOrder) {
+
+                    var els = this.form.elements,
+                        ti = [],
+                        rest = [];
+
+                    // store all focusable form elements with tabIndex > 0
+                    for (var i = 0, il = els.length; i < il; i++) {
+                        if (els[i].tabIndex > 0 &&
+                            !els[i].disabled &&
+                            !els[i].hidden &&
+                            !els[i].readOnly &&
+                            els[i].type !== 'hidden') {
+                            ti.push(els[i]);
+                        }
+                    }
+
+                    // sort them by tabIndex order
+                    ti.sort(function(a,b){ return a.tabIndex - b.tabIndex; });
+
+                    // store the rest of the elements in order
+                    for (i = 0, il = els.length; i < il; i++) {
+                        if (els[i].tabIndex == 0 &&
+                            !els[i].disabled &&
+                            !els[i].hidden &&
+                            !els[i].readOnly &&
+                            els[i].type !== 'hidden') {
+                            rest.push(els[i]);
+                        }
+                    }
+
+                    // store the full tabbing order
+                    this.form.tabOrder = ti.concat(rest);
+                }
+
+                // find the next element in the tabbing order and focus it
+                // if the last element of the form then blur
+                // (this can be changed to focus the next <form> if any)
+                for (var j = 0, jl = this.form.tabOrder.length; j < jl; j++) {
+                    if (this === this.form.tabOrder[j]) {
+                        if (j+1 < jl) {
+                            $(this.form.tabOrder[j+1]).focus();
+                        } else {
+                            $(this).blur();
+                        }
+                    }
+                }
+
+            }
+
+        });
+        </script>
 
 	<script type="text/javascript">
 

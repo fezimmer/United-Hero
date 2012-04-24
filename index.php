@@ -1,9 +1,11 @@
 <?
 	require_once("preheader.php");
 
-	$submitButtonHTML = "<a href=\"#?w=780\" rel=\"signupForm\" class=\"cta start-project poplight\" title=\"Submit Your Project\">Submit Your Project</a>\n";
+	$submitButtonHTML = "<a href=\"#?w=780\" rel=\"signupForm\" class=\"cta start-project poplight\" title=\"Submit Your Product\">Submit Your Product</a>\n";
+	$submitIconHTML = "href=\"#?w=780\" rel=\"signupForm\" class=\"poplight\"";
 	if(is_logged_in()){
-		$submitButtonHTML = "<a href=\"my_account.php\" class=\"cta start-project\" title=\"Submit Your Project\">Submit Your Project</a>\n";
+		$submitButtonHTML = "<a href=\"my_account.php\" class=\"cta start-project\" title=\"Submit Your Product\">Submit Your Product</a>\n";
+		$submitIconHTML = "href=\"my_account.php\"";
 	}
 
 	$featuredProjectInfo = qr("SELECT pkProjectID, fldTitle, fldDescription, fldLocation, fldDesiredFundingAmount, fldVideoHTML, fldTags, fldStatus, fldActualFunding, fldDateCreated, fkUserID FROM tblProject WHERE fldFeatured = 1 LIMIT 1");
@@ -18,9 +20,13 @@
 
 	$fundThisProjectText = "FUND THIS PROJECT";
 	$fundProjectTextSize = "16";
-	if (strlen($fldTitle) > 30){
+	if (strlen($fldTitle) > 28){
 		//$fundThisProjectText = "FUND";
 		$fundProjectTextSize = "11";
+	}
+	if (strlen($fldTitle) > 35){
+		$fundThisProjectText = "FUND";
+		$fundProjectTextSize = "16";
 	}
 	$submittedByInfo 	= qr("SELECT fldFName, fldLName, fldUsername, fldEmail, fldPhone, fldZip, fldSignupDate, fldIPAddress, fldType, fldActive, fldLastLogin FROM tblUser WHERE pkUserID = $fkUserID");
 	extract($submittedByInfo);
@@ -81,9 +87,9 @@
 		  </div>
 			<div class="subFeatured">
 				<div class="sub-featuredBox">
-					<a href="#?w=780\" rel="signupForm" class="poplight" title="Submit Your Project"><img src="images/start-icon.png" class="icon" border="0" /></a>
+					<a <?=$submitIconHTML?> title="Submit Your Product"><img src="images/start-icon.png" class="icon" border="0" /></a>
 					<div class="action-intro">
-						<h2>Start your Project Today</h2>
+						<h2>Sell Your Products Today</h2>
 						<p><? include('start_project_today.inc.php');?></p>
 						<?=$submitButtonHTML?>
 						<div class="no-account">
@@ -95,9 +101,9 @@
 				<div class="sub-featuredBox">
 					<a href="/browse_projects.php"><img src="images/browse-icon.png" class="icon" border="0" /></a>
 					<div class="action-intro">
-						<h2>Browse Current Projects</h2>
+						<h2>Browse Current Products</h2>
 						<p><? include('browse_projects.inc.php');?></p>
-						<a href="/browse_projects.php?pageNum=1" class="cta browse-projects" title="Submit Your Project">Browse projects</a>
+						<a href="/browse_projects.php?pageNum=1" class="cta browse-projects" title="Browse Current Products">Browse Products</a>
 					</div>
 
 				 </div>

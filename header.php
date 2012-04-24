@@ -26,6 +26,16 @@
 			color: #62C9DF;
 		}
 	</style>
+	<script>
+		$(document).ready(function(){
+			$('a[rel="loginForm"]').click(function() {
+				$("#login_email").focus();
+			});
+			$('a[rel="signupForm"]').click(function() {
+				$("#first_name").focus();
+			});
+		});
+	</script>
 </head>
 <body id="home">
 <div class="wrapperOuter">
@@ -35,14 +45,14 @@
 		<div class="headerSec">
 		  <div class="logoSec"> <a href="/index.php"><img src="images/uh-logo_2.png" border="0" alt="united hero" /></a> </div>
 
-          <div id ="header_blurb">
-          We are a Global Platform
-			<br/>for Funding Peoples’ Dreams. <a href="#?w=780" rel="learnMorePopup" class="poplight flash" title="Learn More About Hero Account">Learn More!</a>
+          <div id ="header_blurb" style="color: #fff;">
+          HARVARD'S MARKET
+			<br/>Buy or Sell Products. <a href="#?w=780" rel="learnMorePopup" class="poplight flash" title="Learn More About Hero Account">Learn More!</a>
             </div>
 
 		  <div class="headerCTA">
 		  	<?	if(!is_logged_in()){?>
-		  			<a href="#?w=400" rel="loginForm" class="login poplight" onClick="document.getElementById('login_email').focus();" title="Login to Your Account">Login</a>
+		  			<a href="#?w=400" rel="loginForm" class="login poplight" title="Login to Your Account">Login</a>
 		  			<a href="#?w=780" rel="signupForm" class="signup poplight" title="United Hero Account Creation">Signup</a>
 		  	<? 	}
 		  		else{?>

@@ -1,2 +1,1 @@
-Your dream, shared over Social Networks can spread at the speed of light!
-750  million people on Facebook alone, even the biggest of dreams can now be funded.
+Each Product has a limited amount of time, <b>click on a Product and Reward Yourself!</b>

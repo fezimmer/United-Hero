@@ -12,7 +12,7 @@
 
 	$projectID 	= $_REQUEST['id'];
         $rewardNum      = $_REQUEST['reward'];
-        (int)$donationAmt    = $_REQUEST['amount'];
+        $donationAmt    = q1("SELECT fldSupport FROM tblRewards WHERE pkRewardID = \"$rewardNum\"");
 
 	//if param not id, it may be pkProjectID
 	if(!$projectID) $projectID = $_REQUEST['pkProjectID'];
@@ -110,6 +110,15 @@
                 $rewardorder["reward6"]      = $_POST["r6"];
                 $rewardorder["reward7"]      = $_POST["r7"];
 
+                //fill donation amount from post
+                if($donationAmt == ""){
+                    foreach ($rewardorder as $reward){
+                        if($reward != null){
+                            $donationAmt += q1("SELECT fldSupport FROM tblRewards WHERE pkRewardID = \"$reward\"");
+                        }
+                    }
+                }
+                
 		if ($_POST["debugging"]){
 			$myorder["debugging"]="false";
 		}
@@ -168,7 +177,53 @@
 
                             $ip = $_SERVER['REMOTE_ADDR']; //get the ip address (can be used for geo-locating)
                             $success = qr("INSERT INTO tblPayment (fldName, fldAmount, fldDatetime, fldTransactionID, fldOrderNum, fldRef, fldIPAddress, fkProjectID) VALUES (\"$name\", $amount, NOW(), \"$transactionID\", \"$orderNum\", \"$ref\", \"$ip\", $fkProjectID)");
-                            if ($success){
+                            $pkPaymentId = q1("SELECT pkPaymentID FROM tblPayment WHERE fldTransactionID = \"$transactionID\"");
+
+                            //reward code to process and update parent reward and insert newly purchased child reward
+                            $rewardSuccess = true;
+                            $rewardsLeftResult;
+                            $rSuccess;
+                            foreach ($rewardorder as $reward){
+                                if($reward != null){
+                                    //get parent rewards information
+                                    $pReward = qr("SELECT * FROM tblRewards WHERE pkRewardID = \"$reward\"");
+                                    extract($pReward);
+                                    //parent reward info to be entered to child reward
+                                    $rTitle         = $pReward['fldTitle'];
+                                    $rDescription   = $pReward['fldDescription'];
+                                    $rSupport       = $pReward['fldSupport'];
+                                    $rMonth         = $pReward['fldRewardMonth'];
+                                    $rYear          = $pReward['fldRewardYear'];
+                                    $rProject       = $pReward['fkProjectID'];
+
+                                    $parent = qr("SELECT * FROM tblRewards WHERE pkRewardID = \"$reward\"");
+                                    extract($parent);
+                                    if($parent['fldNumAvailable'] > 0){
+                                        //number of rewards is limited
+                                        if($parent['fldRewardsLeft'] > 0){
+                                            $num = intval($parent['fldRewardsLeft']) - 1;
+                                            //update number of rewards left for parent reward
+                                            $rewardsLeftResult = qr("UPDATE tblRewards SET fldRewardsLeft = \"$num\" WHERE pkRewardID = \"$reward\"");
+                                            //create child reward entry
+                                            $rSuccess = qr("INSERT INTO tblRewards (fldTitle, fldDescription, fldSupport, fldRewardMonth, fldRewardYear, fkPaymentID, fkProjectID, fldStreetAddress, fldCity, fldState, fldZipCode, fldConfEmail, fldName)
+                                                VALUES (\"$rTitle\", \"$rDescription\", \"$rSupport\", \"$rMonth\", \"$rYear\", \"$pkPaymentId\", \"$rProject\", \"$shippingstreet\", \"$shippingcity\", \"$shippingstate\", \"$shippingzip\", \"$shippingemail\", \"$name\")");
+                                        }else{
+                                            $error_msg[] = "The selected reward has reached its limit. Please choose a different reward.";
+                                            $rewardSuccess = false;
+                                        }
+                                    }else{
+                                        //no limit on reward
+                                        //create child reward entry
+                                        $rSuccess = qr("INSERT INTO tblRewards (fldTitle, fldDescription, fldSupport, fldRewardMonth, fldRewardYear, fkPaymentID, fkProjectID, fldStreetAddress, fldCity, fldState, fldZipCode, fldConfEmail, fldName)
+                                                VALUES (\"$rTitle\", \"$rDescription\", \"$rSupport\", \"$rMonth\", \"$rYear\", \"$pkPaymentId\", \"$rProject\", \"$shippingstreet\", \"$shippingcity\", \"$shippingstate\", \"$shippingzip\", \"$shippingemail\", \"$name\")");
+                                    }
+                                }
+                                if(!$rSuccess || !$rewardsLeftResult)
+                                    $rewardSuccess = false;
+                            }
+                            //end reward code
+                            
+                            if ($success && $rewardSuccess){
 
                                     $projectInfo = q1("SELECT fldStatus, fldActualFunding, fldDesiredFundingAmount, fkUserID FROM tblProject WHERE pkProjectID = $projectID");
 
@@ -201,9 +256,8 @@
                                                     $success = send_email_from_template("project-funded-letter.html",$to_email,$subject,$email_template_params, 1, $globals['emails_from']);
                                             }
                                     }//if project now 100%+ funded
-                            }
-                        }
-
+                           }
+                        } 
 		}
 
 	# if verbose output has been checked (i.e. testing mode - send a variable named 'verbose'),
@@ -232,12 +286,13 @@
 <script language="javascript" type="text/javascript">
     var amount;
     var temp;
+
     window.onload = function(){
        temp = document.getElementById("chargetotal");
        amount = temp.value;
     }
     
-    function changeBox(id, rewardId, value){
+    function changeBox(id, rewardId, value, pkID){
         if(document.getElementById(id).style.display == 'block'){
             document.getElementById(id).style.display = 'none';
             document.getElementById(rewardId).value='';
@@ -245,36 +300,86 @@
             document.getElementById("chargetotal").value = eval(parseInt(document.getElementById("chargetotal").value)-parseInt(value));
         } else {
             document.getElementById(id).style.display = 'block';
-            document.getElementById(rewardId).value='Claimed';
+            document.getElementById(rewardId).value=pkID;
             amount = eval(parseInt(document.getElementById("chargetotal").value)+parseInt(value));
             document.getElementById("chargetotal").value = eval(parseInt(document.getElementById("chargetotal").value)+parseInt(value));
         }
     }
-    //oForm.elements["text_element_name"];
+
     function confSubmit(form){
         if(form.r1.value == "" && form.r2.value == "" && form.r3.value == "" && form.r4.value == "" && form.r5.value == "" && form.r6.value == "" && form.r7.value == ""){
             if(confirm("You have not selected any rewards. Do you wish to continue your submission?")){
-                form.action = ("rewards.php?amount=" + amount);
+                form.action = ("rewards.php?id=<?=$projectID?>");
                 form.submit();
             }
         }else{
-            if(document.getElementById("chargetotal").value < 1){
-                alert("I'm sorry, the Financial Support value must be a minimum of $1. Please check your support amount and try again.");
-            }// if the amount required for the rewards is under the amount supported ...good
-            else if(amount <= document.getElementById("chargetotal").value){
-                form.action = ("rewards.php?amount=" + amount);
-                form.submit();
-            }// ...not good
-            else {
-                alert("I'm sorry, the Financial Support value does not match the amount required for the selected reward(s). Please check your selection and try again.");
-                document.getElementById("chargetotal").value = amount;
+            if(financialFormIsGood()){
+                if(document.getElementById("chargetotal").value < 1){
+                    alert("I'm sorry, the Financial Support value must be a minimum of $1. Please check your support amount and try again.");
+                }// if the amount required for the rewards is less than the amount supported ...good
+                else if(amount <= document.getElementById("chargetotal").value){
+                    form.action = ("rewards.php?id=<?=$projectID?>");
+                    form.submit();
+                }// ...not good
+                else {
+                    alert("I'm sorry, the Financial Support value does not match the amount required for the selected reward(s). Please check your selection and try again.");
+                    document.getElementById("chargetotal").value = amount;
+                }
             }
         }
+    }
+
+    function financialFormIsGood(){
+        formIsGood = true;
+        if(document.getElementById("chargetotal").value == ""){
+            formIsGood = false;
+            document.getElementById("chargetotalError").style.display = "block";
+        }else{
+            document.getElementById("chargetotalError").style.display = "none";
+        }
+
+        if(document.getElementById("cardtype").value == ""){
+            formIsGood = false;
+            document.getElementById("cardtypeError").style.display = "block";
+        }else{
+            document.getElementById("cardtypeError").style.display = "none";
+        }
+
+        if(document.getElementById("cardnumber").value == ""){
+            formIsGood = false;
+            document.getElementById("cardnumberError").style.display = "block";
+        }else{
+            document.getElementById("cardnumberError").style.display = "none";
+        }
+
+        if(document.getElementById("cardholdername").value == ""){
+            formIsGood = false;
+            document.getElementById("cardholdernameError").style.display = "block";
+        }else{
+            document.getElementById("cardholdernameError").style.display = "none";
+        }
+
+        if(document.getElementById("security").value == ""){
+            formIsGood = false;
+            document.getElementById("securityError").style.display = "block";
+        }else{
+            document.getElementById("securityError").style.display = "none";
+        }
+
+        if(document.getElementById("cardexpyear").value == "" || document.getElementById("cardexpmonth").value == ""){
+            formIsGood = false;
+            document.getElementById("expError").style.display = "block";
+        }else{
+            document.getElementById("expError").style.display = "none";
+        }
+
+        return formIsGood;
     }
 </script>
 
 <style>
-	a.underline:hover{
+	.formError { font-weight: bold; color:red; margin-left: 5px; display:none;}
+        a.underline:hover{
 		text-decoration: underline;
 	}
 </style>
@@ -284,145 +389,45 @@
                         <div class="rewardsPage" style="width:770px; float:left;">
                             <h3 class="title" style="text-align:center;font-size:22px;text-transform:none;"><?=$fldTitle?></h3>
                         </div>
+                    <?
+                        $rewards = q("SELECT * FROM tblRewards WHERE fkProjectID = \"$projectID\" && fkPaymentID <= \"0\" ORDER BY pkRewardID");
+                        $count = 1;
+                        foreach ($rewards as $reward){
+                            if($reward['fldRewardsLeft'] > 0 || $reward['fldNumAvailable'] == 0){
+                    ?>
+                         <!-- begin reward <?=$count?>-->
                         <div class="rewardsPage">
-                            <!-- begin reward -->
                             <div class="reward">
                                 <div style="width:180px;float:left;padding-right:15px;">
-                                    <img src="/images/sm_design_aspen.png" width="180"/>
+                                    <?if($reward['fldImage'] != ""){?>
+                                    <img src="/magick.php/<?=$reward['fldImage']?>?resize(180)" alt="REWARD IMAGE <?=$count?>"/>
+                                    <?}else{?>
+                                    <div style="width:180px;">&nbsp;</div>
+                                    <?}?>
                                 </div>
                                 <div style="width:560px; float:left;">
-                                    <h3 class="title">Support $1
+                                    <h3 class="title"><?=$reward['fldTitle']?>&nbsp;-&nbsp;$<?=$reward['fldSupport']?>
                                         <span style="float:right;">I would like this reward!
-                                        <input type="checkbox" name="box1" onclick="changeBox('reward1', 'r1', '1')"
-                                            <?if($rewardNum == '1' || $rewardorder["reward1"] != '') echo "checked";?>
+                                        <input type="checkbox" name="box<?=$count?>" onclick="changeBox('reward<?=$count?>', 'r<?=$count?>', '<?=$reward['fldSupport']?>', '<?=$reward['pkRewardID']?>')"
+                                            <?if($rewardNum == $reward['pkRewardID'] || $rewardorder["reward".$count] != '') echo "checked";?>
                                         /></span></h3><br/>
-                                    <div id="reward1" class="boxNum" style="margin:0 25px 0 15px;float:right;display:<?if($rewardNum == '1' || $rewardorder["reward1"] != ''){echo "block";}else{ echo "none";}?>;">1. Reward </div>
-                                    <span class="description">Exclusive updates on the film sent directly to you!</span><br/>
-                                    <span class="delivery"><em>Estimated Delivery: Jan 2013</em></span>
+                                    <div id="reward<?=$count?>" style="margin:0 25px 0 15px;float:right;display:<?if($rewardNum == $reward['pkRewardID'] || $rewardorder["reward".$count] != ''){echo "block";}else{ echo "none";}?>;">
+                                        <div class="boxNum"><?=$count?>. Reward</div><br/><br/>
+                                        <?if($reward['fldNumAvailable'] != 0){?>
+                                        <div class="claim"><?=($reward['fldNumAvailable'] - $reward['fldRewardsLeft'])?> of <?=$reward['fldNumAvailable']?> Claimed</div>
+                                        <?}?>
+                                    </div>
+                                        <span class="delivery"><em>Estimated Delivery Date:<br/><span style="padding-left:40px;"><?=getMonthForReward($reward['fldRewardMonth'])?> <?=$reward['fldRewardYear']?></span></em></span><br/><br/>
+                                    <span class="description"><?=$reward['fldDescription']?></span>                                    
                                 </div>
                             </div>
                         </div>
                             <!-- end reward -->
-                            
-                            <!-- begin reward -->
-                        <div class="rewardsPage">
-                            <div class="reward">
-                                <div style="width:180px;float:left;padding-right:15px;">
-                                    <img src="/images/sm_design_FON.png" width="180"/>
-                                </div>
-                                <div style="width:560px; float:left;">
-                                    <h3 class="title">Support $10
-                                        <span style="float:right;">I would like this reward!
-                                        <input type="checkbox" name="box2" onclick="changeBox('reward2', 'r2', '10')"
-                                            <?if($rewardNum == '2' || $rewardorder["reward2"] != '') echo "checked";?>
-                                        /></span></h3><br/>
-                                    <div id="reward2" class="boxNum" style="margin:0 25px 0 15px;float:right;display:<?if($rewardNum == '2' || $rewardorder["reward2"] != ''){echo "block";}else{ echo "none";}?>;">2. Reward </div>
-                                    <span class="description">Special thanks on our website and in the film’s end credits, exclusive updates, plus a digital poster e-mailed to you, and a sneak peek at a scene from the film!</span><br/><br/>
-                                    <span class="delivery"><em>Estimated Delivery: Mar 2013</em></span>
-                                </div>
-                            </div>
-                        </div>
-                            <!-- end reward -->
-
-                            <!-- begin reward -->
-                        <div class="rewardsPage">
-                            <div class="reward">
-                                <div style="width:180px;float:left;padding-right:15px;">
-                                    <img src="/images/sm_design_biracy.png" width="180"/>
-                                </div>
-                                <div style="width:560px; float:left;">
-                                    <h3 class="title">Support $25
-                                        <span style="float:right;">I would like this reward!
-                                        <input type="checkbox" name="box3" onclick="changeBox('reward3', 'r3', '25')"
-                                            <?if($rewardNum == '3' || $rewardorder["reward3"] != '') echo "checked";?>
-                                        /></span></h3><br/>
-                                    <div id="reward3" class="boxNum" style="margin:0 25px 0 15px;float:right;display:<?if($rewardNum == '3' || $rewardorder["reward3"] != ''){echo "block";}else{ echo "none";}?>;">3. Reward </div>
-                                    <span class="description">Digital download of the finished film, Sex After Kids postcard autographed by a member of the cast, a ring tone by the film&rsquo;s composer, plus everything above!</span><br/><br/>
-                                    <span class="delivery"><em>Estimated Delivery: Mar 2013</em></span>
-                                </div>
-                            </div>
-                        </div>
-                            <!-- end reward -->
-
-                            <!-- begin reward -->
-                        <div class="rewardsPage">
-                            <div class="reward">
-                                <div style="width:180px;float:left;padding-right:15px;">
-                                    <img src="/images/sm_design_chloe.png" width="180"/>
-                                </div>
-                                <div style="width:560px; float:left;">
-                                    <h3 class="title">Support $50
-                                        <span style="float:right;">I would like this reward!
-                                        <input type="checkbox" name="box4" onclick="changeBox('reward4', 'r4', '50')"
-                                            <?if($rewardNum == '4' || $rewardorder["reward4"] != '') echo "checked";?>
-                                        /></span></h3><br/>
-                                    <div id="reward4" class="boxNum" style="margin:0 25px 0 15px;float:right;display:<?if($rewardNum == '4' || $rewardorder["reward4"] != ''){echo "block";}else{ echo "none";}?>;">4. Reward </div>
-                                    <span class="description">Exclusive updates on the film sent directly to you!</span><br/><br/>
-                                    <span class="delivery"><em>Estimated Delivery: Mar 2013</em></span>
-                                </div>
-                            </div>
-                        </div>
-                            <!-- end reward -->
-
-                            <!-- begin reward -->
-                        <div class="rewardsPage">
-                            <div class="reward">
-                                <div style="width:180px;float:left;padding-right:15px;">
-                                    <img src="/images/sm_design_cove.png" width="180"/>
-                                </div>
-                                <div style="width:560px; float:left;">
-                                    <h3 class="title">Support $100
-                                        <span style="float:right;">I would like this reward!
-                                        <input type="checkbox" name="box5" onclick="changeBox('reward5', 'r5', '100')"
-                                            <?if($rewardNum == '5' || $rewardorder["reward5"] != '') echo "checked";?>
-                                        /></span></h3><br/>
-                                    <div id="reward5" class="boxNum" style="margin:0 25px 0 15px;float:right;display:<?if($rewardNum == '5' || $rewardorder["reward5"] != ''){echo "block";}else{ echo "none";}?>;">5. Reward </div>
-                                    <span class="description">Special thanks on our website and in the film’s end credits, exclusive updates, plus a digital poster e-mailed to you, and a sneak peek at a scene from the film!</span><br/><br/>
-                                    <span class="delivery"><em>Estimated Delivery: Mar 2013</em></span>
-                                </div>
-                            </div>
-                        </div>
-                            <!-- end reward -->
-
-                            <!-- begin reward -->
-                        <div class="rewardsPage">
-                            <div class="reward">
-                                <div style="width:180px;float:left;padding-right:15px;">
-                                    <img src="/images/sm_design_covelinksgolf.png" width="180"/>
-                                </div>
-                                <div style="width:560px; float:left;">
-                                    <h3 class="title">Support $500
-                                        <span style="float:right;">I would like this reward!
-                                        <input type="checkbox" name="box6" onclick="changeBox('reward6', 'r6', '500')"
-                                            <?if($rewardNum == '6' || $rewardorder["reward6"] != '') echo "checked";?>
-                                        /></span></h3><br/>
-                                    <div id="reward6" class="boxNum" style="margin:0 25px 0 15px;float:right;display:<?if($rewardNum == '6' || $rewardorder["reward6"] != ''){echo "block";}else{ echo "none";}?>;">6. Reward </div>
-                                    <span class="description">Digital download of the finished film, Sex After Kids postcard autographed by a member of the cast, a ring tone by the film&rsquo;s composer, plus everything above!</span><br/><br/>
-                                    <span class="delivery"><em>Estimated Delivery: Mar 2013</em></span>
-                                </div>
-                            </div>
-                        </div>
-                            <!-- end reward -->
-
-                            <!-- begin reward -->
-                        <div class="rewardsPage">
-                            <div class="reward">
-                                <div style="width:180px;float:left;padding-right:15px;">
-                                    <img src="/images/sm_design_georgies.png" width="180"/>
-                                </div>
-                                <div style="width:560px; float:left;">
-                                    <h3 class="title">Support $1000
-                                        <span style="float:right;">I would like this reward!
-                                        <input type="checkbox" name="box7" onclick="changeBox('reward7', 'r7', '1000')"
-                                            <?if($rewardNum == '7' || $rewardorder["reward7"] != '') echo "checked";?>
-                                        /></span></h3><br/>
-                                    <div id="reward7" class="boxNum" style="margin:0 25px 0 15px;float:right;display:<?if($rewardNum == '7' || $rewardorder["reward7"] != ''){echo "block";}else{ echo "none";}?>;">7. Reward </div>
-                                    <span class="description">Special thanks on our website and in the film’s end credits, exclusive updates, plus a digital poster e-mailed to you, and a sneak peek at a scene from the film!</span><br/><br/>
-                                    <span class="delivery"><em>Estimated Delivery: Mar 2013</em></span>
-                                </div>
-                            </div>
-                        </div>
-                            <!-- end reward -->
+                    <?
+                            }
+                            $count++;
+                        }
+                    ?>
 
                         <div class="rewardsPage" style="width:772px; float:left;">
                             <a href="/project_test.php?id=<?=$projectID?>" style="padding-left:24px;">Return to Project page...</a>
@@ -440,104 +445,104 @@
 				</div>
                 </div>
                 <div class="project-details2" style="float:right !important;width:342px;margin-left:0px;">
-				<div id="paymentDiv" class="more-details">
-					<? echo_msg_box();?>
-					<p>
-						<img src="/images/Bank-America.jpg" width="200" \>
-					</p>
-					<p><form name="paymentForm" action="" method="POST" id="paymentForm">
-						<input type="hidden" name="ordertype" value="SALE">
-						<input type="hidden" name="action" value="submitPayment">
-						<input type="hidden" name="id" value="<?=$projectID?>">
+                    <div id="paymentDiv" class="more-details">
+                        <? echo_msg_box();?>
+                        <p>
+                            <img src="/images/Bank-America.jpg" width="200" alt="Bank Of America"\>
+                        </p>
+                        <form name="paymentForm" action="" method="POST" id="paymentForm">
+                            <input type="hidden" name="ordertype" value="SALE"/>
+                            <input type="hidden" name="action" value="submitPayment"/>
+                            <input type="hidden" name="id" value="<?=$projectID?>"/>
+                    <?
+                            $rewards = q("SELECT * FROM tblRewards WHERE fkProjectID = \"$projectID\" ORDER BY pkRewardID");
+                            $i = 1;
+                            foreach ($rewards as $reward){
+                                extract($reward);
+                    ?>
 
-                                                <input id="r1" type="hidden" name="r1" value="<?if($rewardNum == '1' || $rewardorder["reward1"] != '') echo "Claimed";?>"/>
-                                                <input id="r2" type="hidden" name="r2" value="<?if($rewardNum == '2' || $rewardorder["reward2"] != '') echo "Claimed";?>"/>
-                                                <input id="r3" type="hidden" name="r3" value="<?if($rewardNum == '3' || $rewardorder["reward3"] != '') echo "Claimed";?>"/>
-                                                <input id="r4" type="hidden" name="r4" value="<?if($rewardNum == '4' || $rewardorder["reward4"] != '') echo "Claimed";?>"/>
-                                                <input id="r5" type="hidden" name="r5" value="<?if($rewardNum == '5' || $rewardorder["reward5"] != '') echo "Claimed";?>"/>
-                                                <input id="r6" type="hidden" name="r6" value="<?if($rewardNum == '6' || $rewardorder["reward6"] != '') echo "Claimed";?>"/>
-                                                <input id="r7" type="hidden" name="r7" value="<?if($rewardNum == '7' || $rewardorder["reward7"] != '') echo "Claimed";?>"/>
-						<!--input type="hidden" name="verbose" value="false"-->
-
-                         Financial Support&nbsp;&nbsp;<br/>
-                        $<input id="chargetotal" name="chargetotal" type=INT size="8" value="<?=$donationAmt?>"/>&nbsp;&nbsp; minimum $1
-
-                        <br/><br/>
-                        <select name="cardtype" >
-							<option value="" SELECTED>--Credit Card Type--
-							<option value="01">Visa
-							<option value="02">masterCard
-							<option value="03">Discover
-							<option value="04">AMEX
-
-						</select><br/><br/>
-						Credit Card Number<br/>
-						<input name="cardnumber" type="text" /><br/><br />
-						Name on Credit Card<br/>
-						 <input name="cardholdername" type="text" /> <br/><br />
-						 Security Code<br/>
-						 <input name="secuirty" type="text" size="2" maxlength="3" />&nbsp;&nbsp; 3 digit number on back of credit card
-
-						 <br/><br/>
-
-						 <select name="cardexpmonth" >
-							<option value="" SELECTED>--Expiration Month--
-							<option value="01">January (01)
-							<option value="02">February (02)
-							<option value="03">March (03)
-							<option value="04">APRIL (04)
-							<option value="05">MAY (05)
-							<option value="06">JUNE (06)
-							<option value="07">JULY (07)
-							<option value="08">AUGUST (08)
-							<option value="09">SEPTEMBER (09)
-							<option value="10">OCTOBER (10)
-							<option value="11">NOVEMBER (11)
-							<option value="12">DECEMBER (12)
-						</select> /
-						<select name="cardexpyear">
-							<option value="" SELECTED>--Expiration Year--
-							<option value="10">2010
-							<option value="11">2011
-							<option value="12">2012
-							<option value="13">2013
-							<option value="14">2014
-							<option value="15">2015
-							<option value="16">2016
-							<option value="17">2017
-							<option value="18">2018
-						</select>
-
-					    <br/><br/><br/><br/>
-                                            <strong>Shipping Address</strong>
-                                            <br/><br/>
-                                            <?
-                                                if($action == "submitPayment"){
-                                                    if(!$shippingDataOkay){
-                                                        echo "<span style='color:red;font-weight:bold;'>-- Required fields marked by a * --</span><br/><br/>";
-                                                    }
-                                                }
-                                            ?>
-
-                                                Street Address <?if(!$shippingDataOkay && $action == "submitPayment" && $streetNeeded == true) echo "<span style='color:red;font-weight:bold;'>*</span>";?><br/>
-                                                <input name="shippingstreet" type="text" size="25" value="<?=$shippingstreet?>"/> <br/><br />
-                                                City <?if(!$shippingDataOkay && $action == "submitPayment" && $cityNeeded == true) echo "<span style='color:red;font-weight:bold;'>*</span>";?><br/>
-                                                <input name="shippingcity" type="text" size="15" value="<?=$shippingcity?>"/> <br/><br />
-                                                State <?if(!$shippingDataOkay && $action == "submitPayment" && $stateNeeded == true) echo "<span style='color:red;font-weight:bold;'>*</span>";?><br/>
-                                                <input name="shippingstate" type="text" size="2" maxlength="2" value="<?=$shippingstate?>"/> <br/><br />
-                                                Zip Code <?if(!$shippingDataOkay && $action == "submitPayment" && $zipNeeded == true) echo "<span style='color:red;font-weight:bold;'>*</span>";?><br/>
-                                                <input name="shippingzip" type="text" size="8" maxlength="10" value="<?=$shippingzip?>"/> <br/><br />
-                                                Email&nbsp;<em>(for confirmation)</em><?if(!$shippingDataOkay && $action == "submitPayment" && $emailNeeded == true) echo "<span style='color:red;font-weight:bold;'>*</span>";?><br/>
-                                                <input name="shippingemail" type="text" size="25" value="<?=$shippingemail?>"/> <br/><br />
-                                            * Claim your reward(s) by checking the reward box
-						<div class="reward">
-                                                    <div class="num" style="float:right;cursor:pointer;" onClick="confSubmit(document.getElementById('paymentForm'))">Submit Payment</div>
-						</div>
+                            <input id="r<?=$i?>" type="hidden" name="r<?=$i?>" value="<?if($rewardNum == $reward['pkRewardID'] || $rewardorder["reward".$i] != ''){ echo $reward['pkRewardID'];}?>"/>
+                    <?
+                                $i++;
+                            }
+                    ?>
+                            Financial Support&nbsp;&nbsp;<br/>
+                            $<input id="chargetotal" name="chargetotal" type=INT size="8" value="<?if($donationAmt != null) echo $donationAmt; else echo '0';?>"/>&nbsp;&nbsp; minimum $1
+                            <span class="formError" id="chargetotalError">charge total is required</span>
+                            <br/><br/>
+                            <select name="cardtype" id="cardtype">
+                                <option value="" SELECTED>--Credit Card Type--
+                                <option value="01">Visa
+                                <option value="02">Master Card
+                                <option value="03">Discover
+                                <option value="04">AMEX
+                            </select><span class="formError" id="cardtypeError">card type is required</span>
+                                <br/><br/>
+                            Credit Card Number<br/>
+                            <input name="cardnumber" id="cardnumber" type="text" /><span class="formError" id="cardnumberError">card number is required</span><br/><br />
+                            Name on Credit Card<br/>
+                            <input name="cardholdername" id="cardholdername" type="text" /><span class="formError" id="cardholdernameError">card holder name is required</span><br/><br />
+                            Security Code<br/>
+                            <input name="secuirty" id="security" type="text" size="2" maxlength="3" />&nbsp;&nbsp; 3 digit number on back of credit card
+                                <br/>
+                                <span class="formError" id="securityError">security code is required</span>
+                                <br/>
+                            <select name="cardexpmonth" id="cardexpmonth">
+                                    <option value="" SELECTED>--Expiration Month--
+                                    <option value="01">January (01)
+                                    <option value="02">February (02)
+                                    <option value="03">March (03)
+                                    <option value="04">APRIL (04)
+                                    <option value="05">MAY (05)
+                                    <option value="06">JUNE (06)
+                                    <option value="07">JULY (07)
+                                    <option value="08">AUGUST (08)
+                                    <option value="09">SEPTEMBER (09)
+                                    <option value="10">OCTOBER (10)
+                                    <option value="11">NOVEMBER (11)
+                                    <option value="12">DECEMBER (12)
+                            </select> /
+                            <select name="cardexpyear" id="cardexpyear">
+                                    <option value="" SELECTED>--Expiration Year--
+                                    <option value="10">2010
+                                    <option value="11">2011
+                                    <option value="12">2012
+                                    <option value="13">2013
+                                    <option value="14">2014
+                                    <option value="15">2015
+                                    <option value="16">2016
+                                    <option value="17">2017
+                                    <option value="18">2018
+                            </select>
+                                <br/>
+                                <span class="formError" id="expError">expiration month/year is required</span>
+                                <br/><br/><br/>
+                            <strong>Shipping Address</strong>
+                            <br/><br/>
+                    <?
+                            if($action == "submitPayment"){
+                                if(!$shippingDataOkay){
+                                    echo "<span style='color:red;font-weight:bold;'>-- Required fields marked by a * --</span><br/><br/>";
+                                }
+                            }
+                    ?>
+                            Street Address <?if(!$shippingDataOkay && $action == "submitPayment" && $streetNeeded == true) echo "<span style='color:red;font-weight:bold;'>*</span>";?><br/>
+                            <input name="shippingstreet" type="text" size="25" value="<?=$shippingstreet?>"/> <br/><br />
+                            City <?if(!$shippingDataOkay && $action == "submitPayment" && $cityNeeded == true) echo "<span style='color:red;font-weight:bold;'>*</span>";?><br/>
+                            <input name="shippingcity" type="text" size="15" value="<?=$shippingcity?>"/> <br/><br />
+                            State <?if(!$shippingDataOkay && $action == "submitPayment" && $stateNeeded == true) echo "<span style='color:red;font-weight:bold;'>*</span>";?><br/>
+                            <input name="shippingstate" type="text" size="2" maxlength="2" value="<?=$shippingstate?>"/> <br/><br />
+                            Zip Code <?if(!$shippingDataOkay && $action == "submitPayment" && $zipNeeded == true) echo "<span style='color:red;font-weight:bold;'>*</span>";?><br/>
+                            <input name="shippingzip" type="text" size="8" maxlength="10" value="<?=$shippingzip?>"/> <br/><br />
+                            Email&nbsp;<em>(for confirmation)</em><?if(!$shippingDataOkay && $action == "submitPayment" && $emailNeeded == true) echo "<span style='color:red;font-weight:bold;'>*</span>";?><br/>
+                            <input name="shippingemail" type="text" size="25" value="<?=$shippingemail?>"/> <br/><br />
+                            * Claim your reward(s) by checking the reward box
+                            <div class="reward">
+                                <div class="num" style="float:right;cursor:pointer;" onClick="confSubmit(document.getElementById('paymentForm'))">Submit Payment</div>
+                            </div>
                         </form>
-
-				</div>
-			</div>
-
+                    </div>
+                </div>
 <?
 	include("footer.php");
 ?>

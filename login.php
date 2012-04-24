@@ -129,15 +129,15 @@ if($_POST[fldEmail] != ''){
           <table width="100%" class='form' border="0" cellspacing="0" cellpadding="4" style="font-size: 13px;">
             <tr>
               <td width="17%">Email</td>
-              <td width="83%" ><input name="login_email" type="text" id="login_email"></td>
+              <td width="83%" ><input name="login_email" type="text" id="login_email"/></td>
             </tr>
             <tr>
               <td>Password</td>
-              <td><input name="login_password" type="password" id="login_password"></td>
+              <td><input name="login_password" type="password" id="login_password"/></td>
             </tr>
             <tr >
               <td>&nbsp;</td>
-              <td><input type="submit" class="submit" type="submit" value="Login" /></td>
+              <td><input type="submit" class="submit" type="submit" value="Login"/></td>
             </tr>
           </table>
 		 </form>
@@ -148,13 +148,13 @@ if($_POST[fldEmail] != ''){
           <hr><br />
 
           <h1 id="forgotPassword">I Forgot My Password!</h1>
-          <p>Enter your email address below to recieve a new password. Once you log in you can change your password.</p>
-          <form name="form2" method="post" action="login.php">
+          <p>Enter your email address below to receive a new password. Once you log in you can change your password.</p>
+          <form name="form2" method="post" action="login.php" >
             <table border="0" cellspacing="0" cellpadding="4">
               <tr>
                 <td width="27%" class="form_var">Email Address </td>
                 <td width="73%"><input name="fldEmail" type="text" id="fldEmail" size="40">&nbsp;
-                <input type="submit" class="submit" name="Submit" value="Submit" ></td>
+                <input type="submit" class="submit" name="Submit" value="Submit"accesskey="2"/></td>
               </tr>
             </table>
           </form>
