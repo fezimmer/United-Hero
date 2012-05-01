@@ -30,7 +30,7 @@
 					<!-- end inner div -->
 				</div>
 
-			<? include('sidebar.inc.php');?>
+			<? include('rewards_sidebar.inc.php');?>
 			<div style="clear:both;"> </div>
 
 <?

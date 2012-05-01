@@ -20,7 +20,7 @@
 ?>
 	<div class="page-Rightcol  blogTitle_box col">
 		<div class="boxLine_featured blogTitle_box">
-			<h2>Featured Project</h2>
+			<h2>Featured Product</h2>
 			<ul style="margin-left:7px;">
 				<li class="first"> <a href="/project.php?id=<?=$pkProjectID?>">
 					<div class="img-box">
@@ -40,7 +40,7 @@
 					</div>
 				</li>
 				<div class="project-cta">
-					<a href="/project.php?id=<?=$pkProjectID?>&support=yes" class="support" style="margin-left: 10px; width:200px;">Support this Project</a>
+					<a href="/project.php?id=<?=$pkProjectID?>&support=yes" class="support" style="margin-left: 10px; width:200px;">Support this Product</a>
 				</div>
 
 			</ul>

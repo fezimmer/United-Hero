@@ -112,11 +112,16 @@
 					else{
 						$hide_form = false;
 					}
+
 				}
 			}//else was a success
 
+			login_as($fldEmail, "fldEmail");
+			$full_name = $fldFName . " " . $fldLName;
+			header("Location: my_account.php?rep_msg=" . $full_name . ", you are now logged in.");
 
 		}//if count error messages = 0
+
 
 
 	}//if POST()

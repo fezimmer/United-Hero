@@ -341,8 +341,8 @@
                         
 		  <div>
 			 <div style="clear: both"></div>
-			<div class="similar">Similar Projects
-				<a href="/browse_projects.php?pageNum=1" class="browse-more">Browse other Projects</a>
+			<div class="similar">Similar Products
+				<a href="/browse_projects.php?pageNum=1" class="browse-more">Browse other Products</a>
 			</div>
 			 <div class="boxLine_first_new">
 				<div class="blogTitle_box blogTitle_box_new" id="postsDiv">
@@ -406,8 +406,8 @@
                             foreach ($rewards as $reward){
                         ?>
                         <!-- begin reward <?=$count?> -->
-                        <div class="reward-details">
-                            <div class="reward img-box">
+                        <div style="cursor:pointer;" class="reward-details" onclick="checkReward('hiddenReward<?=$count?>', '<?=$projectID?>', '<?=$reward['pkRewardID']?>')">
+                            <div class="reward img-box"><span style="float:left;margin:10px 15px 0 0;color:#2795D4;">$<?=$reward['fldSupport']?></span>
                                 <h3 class="title"><?=$reward['fldTitle']?></h3>
                                 <span class="description"><?=$reward['fldDescription']?></span><br/><br/>
                                 <a onclick="checkReward('hiddenReward<?=$count?>', '<?=$projectID?>', '<?=$reward['pkRewardID']?>')" href="#"><div class="num"><?=$count?>. Reward </div></a>

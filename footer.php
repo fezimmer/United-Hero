@@ -167,7 +167,7 @@
 	<!-- login hidden content for modal popup -->
 	<div class="site-login popup_block" id="loginForm">
 
-		<form method="post" action="login.php" id="loginForm_form">
+		<form method="post" action="login.php" id="loginForm_form" onSubmit="document.getElementById('loginForm_form').submit();">
 			<p> <label>Email <span>*</span></label> <input id="login_email" tabindex="1" size="20" maxlength="100" type="text" name="login_email" value="" /> </p>
 			<p> <label>Password<span>*</span></label> <input id="login_password" tabindex="2" type="password" name="login_password" value="" /> </p>
 			<!--p class"terms"> <input type="checkbox" id="remember" style="float:left; width:13px; margin:0 10px 3px 0 " /> <label for="remember" style="width:330px">Remember me</label> </p-->
@@ -175,7 +175,7 @@
 			<div style="clear:both;"> </div>
 			<div class="action-buttons">
 				<button class="button button-gray btn-close">Cancel</button>
-				<button class="button button-blue btn-login" onClick="document.getElementById('loginForm_form').submit();" tabindex="3">Login</button>
+				<button name="LoginFormButton" class="button button-blue btn-login" onClick="document.getElementById('loginForm_form').submit();" tabindex="3">Login</button>
 				<a href="/login.php#forgotPassword" class="forgot">Forgot my password</a>
 			</div>
 		</form>
@@ -187,7 +187,7 @@
         <script type="text/javascript">
         $(':input').keypress(function(e){
 
-            // if 'z' pressed
+            // if 'tab' pressed
             if (e.which == 9) {
 
                 // if we haven't stored the tabbing order

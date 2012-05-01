@@ -14,6 +14,7 @@
         $rewardNum      = $_REQUEST['reward'];
         $donationAmt    = q1("SELECT fldSupport FROM tblRewards WHERE pkRewardID = \"$rewardNum\"");
 
+
 	//if param not id, it may be pkProjectID
 	if(!$projectID) $projectID = $_REQUEST['pkProjectID'];
 	if (!$projectID) header("Location: index.php");
@@ -23,6 +24,7 @@
 	$projectInfo 		= qr("SELECT pkProjectID, fldTitle, fldDescription, fldImage, fldLocation, fldDesiredFundingAmount, fldVideoHTML, fldTags, fldStatus, fldActualFunding, fldDateCreated, fkUserID FROM tblProject WHERE pkProjectID = \"$projectID\"");
 	if ($projectInfo){
 		extract($projectInfo);
+                $ProjectTitle = $fldTitle;
 	}
 	else{
 		if (!$pkProjectID){
@@ -62,7 +64,7 @@
 	if ($fldStatus == 'review'){
 		//per requirement on 10/3/2011 in email from Matt - when viewing a project in review, days remaining must be 0
 		$daysRemaining = 0;
-		$daysText = "<strong style='color: blue;'>PROJECT IN REVIEW</strong>";
+		$daysText = "<strong style='color: blue;'>PROJECT UNDER REVIEW</strong>";
 	}
 	if ($fldStatus == 'funded'){
 		$daysText = "<strong style='color: greeg;'>PROJECT FULLY FUNDED</strong>";
@@ -181,8 +183,8 @@
 
                             //reward code to process and update parent reward and insert newly purchased child reward
                             $rewardSuccess = true;
-                            $rewardsLeftResult;
-                            $rSuccess;
+                            $rewardsLeftResult = true;
+                            $rSuccess = true;
                             foreach ($rewardorder as $reward){
                                 if($reward != null){
                                     //get parent rewards information
@@ -194,7 +196,6 @@
                                     $rSupport       = $pReward['fldSupport'];
                                     $rMonth         = $pReward['fldRewardMonth'];
                                     $rYear          = $pReward['fldRewardYear'];
-                                    $rProject       = $pReward['fkProjectID'];
 
                                     $parent = qr("SELECT * FROM tblRewards WHERE pkRewardID = \"$reward\"");
                                     extract($parent);
@@ -206,7 +207,7 @@
                                             $rewardsLeftResult = qr("UPDATE tblRewards SET fldRewardsLeft = \"$num\" WHERE pkRewardID = \"$reward\"");
                                             //create child reward entry
                                             $rSuccess = qr("INSERT INTO tblRewards (fldTitle, fldDescription, fldSupport, fldRewardMonth, fldRewardYear, fkPaymentID, fkProjectID, fldStreetAddress, fldCity, fldState, fldZipCode, fldConfEmail, fldName)
-                                                VALUES (\"$rTitle\", \"$rDescription\", \"$rSupport\", \"$rMonth\", \"$rYear\", \"$pkPaymentId\", \"$rProject\", \"$shippingstreet\", \"$shippingcity\", \"$shippingstate\", \"$shippingzip\", \"$shippingemail\", \"$name\")");
+                                                VALUES (\"$rTitle\", \"$rDescription\", \"$rSupport\", \"$rMonth\", \"$rYear\", \"$transactionID\", \"$fkProjectID\", \"$shippingstreet\", \"$shippingcity\", \"$shippingstate\", \"$shippingzip\", \"$shippingemail\", \"$name\")");
                                         }else{
                                             $error_msg[] = "The selected reward has reached its limit. Please choose a different reward.";
                                             $rewardSuccess = false;
@@ -215,14 +216,14 @@
                                         //no limit on reward
                                         //create child reward entry
                                         $rSuccess = qr("INSERT INTO tblRewards (fldTitle, fldDescription, fldSupport, fldRewardMonth, fldRewardYear, fkPaymentID, fkProjectID, fldStreetAddress, fldCity, fldState, fldZipCode, fldConfEmail, fldName)
-                                                VALUES (\"$rTitle\", \"$rDescription\", \"$rSupport\", \"$rMonth\", \"$rYear\", \"$pkPaymentId\", \"$rProject\", \"$shippingstreet\", \"$shippingcity\", \"$shippingstate\", \"$shippingzip\", \"$shippingemail\", \"$name\")");
+                                                VALUES (\"$rTitle\", \"$rDescription\", \"$rSupport\", \"$rMonth\", \"$rYear\", \"$transactionID\", \"$fkProjectID\", \"$shippingstreet\", \"$shippingcity\", \"$shippingstate\", \"$shippingzip\", \"$shippingemail\", \"$name\")");
                                     }
                                 }
                                 if(!$rSuccess || !$rewardsLeftResult)
                                     $rewardSuccess = false;
                             }
                             //end reward code
-                            
+
                             if ($success && $rewardSuccess){
 
                                     $projectInfo = q1("SELECT fldStatus, fldActualFunding, fldDesiredFundingAmount, fkUserID FROM tblProject WHERE pkProjectID = $projectID");
@@ -257,7 +258,7 @@
                                             }
                                     }//if project now 100%+ funded
                            }
-                        } 
+                    }
 		}
 
 	# if verbose output has been checked (i.e. testing mode - send a variable named 'verbose'),
@@ -373,6 +374,41 @@
             document.getElementById("expError").style.display = "none";
         }
 
+        if(document.getElementById("shippingstreet").value == ""){
+            formIsGood = false;
+            document.getElementById("streetError").style.display = "block";
+        }else{
+            document.getElementById("streetError").style.display = "none";
+        }
+
+        if(document.getElementById("shippingcity").value == ""){
+            formIsGood = false;
+            document.getElementById("cityError").style.display = "block";
+        }else{
+            document.getElementById("cityError").style.display = "none";
+        }
+
+        if(document.getElementById("shippingstate").value == ""){
+            formIsGood = false;
+            document.getElementById("stateError").style.display = "block";
+        }else{
+            document.getElementById("stateError").style.display = "none";
+        }
+
+        if(document.getElementById("shippingzip").value == ""){
+            formIsGood = false;
+            document.getElementById("zipError").style.display = "block";
+        }else{
+            document.getElementById("zipError").style.display = "none";
+        }
+
+        if(document.getElementById("shippingemail").value == ""){
+            formIsGood = false;
+            document.getElementById("emailError").style.display = "block";
+        }else{
+            document.getElementById("emailError").style.display = "none";
+        }
+
         return formIsGood;
     }
 </script>
@@ -387,7 +423,7 @@
                 <!--Start Main Container-->
 		<div class="mainContainer" style="width:800px; float:left;">
                         <div class="rewardsPage" style="width:770px; float:left;">
-                            <h3 class="title" style="text-align:center;font-size:22px;text-transform:none;"><?=$fldTitle?></h3>
+                            <h3 class="title" style="text-align:center;font-size:22px;text-transform:none;"><?=$ProjectTitle?></h3>
                         </div>
                     <?
                         $rewards = q("SELECT * FROM tblRewards WHERE fkProjectID = \"$projectID\" && fkPaymentID <= \"0\" ORDER BY pkRewardID");
@@ -430,7 +466,7 @@
                     ?>
 
                         <div class="rewardsPage" style="width:772px; float:left;">
-                            <a href="/project_test.php?id=<?=$projectID?>" style="padding-left:24px;">Return to Project page...</a>
+                            <a href="/project.php?id=<?=$projectID?>" style="padding-left:24px; font-size: 25px;">Return to Product page...</a>
                         </div>
                            
                 </div>
@@ -441,7 +477,8 @@
 				<div class="progress-info">
 				  <div class="info-block first"> <strong><?=$percentComplete?>%</strong> FUNDED </div>
 				  <div class="info-block"> <strong><?=$fldActualFunding?></strong> SO FAR </div>
-				  <div class="info-block"> <?=$daysText?> <span style="font-size:9px;" align="top" valign="top">(<a style="color: red;" href="#?w=780" rel="daysLeftPopup" class="poplight underline" title="Information on Days Left">?</a>)</span></div>
+				  <div class="info-block"><br/> <?=$daysText?> <!--<span style="font-size:9px;" align="top" valign="top">(<a style="color: red;" href="#?w=780" rel="daysLeftPopup" class="poplight underline" title="Information on Days Left">?</a>)</span>-->
+                                  </div>
 				</div>
                 </div>
                 <div class="project-details2" style="float:right !important;width:342px;margin-left:0px;">
@@ -455,7 +492,7 @@
                             <input type="hidden" name="action" value="submitPayment"/>
                             <input type="hidden" name="id" value="<?=$projectID?>"/>
                     <?
-                            $rewards = q("SELECT * FROM tblRewards WHERE fkProjectID = \"$projectID\" ORDER BY pkRewardID");
+                            $rewards = q("SELECT * FROM tblRewards WHERE fkProjectID = \"$projectID\" AND fkPaymentID <= \"0\" ORDER BY pkRewardID");
                             $i = 1;
                             foreach ($rewards as $reward){
                                 extract($reward);
@@ -467,7 +504,7 @@
                             }
                     ?>
                             Financial Support&nbsp;&nbsp;<br/>
-                            $<input id="chargetotal" name="chargetotal" type=INT size="8" value="<?if($donationAmt != null) echo $donationAmt; else echo '0';?>"/>&nbsp;&nbsp; minimum $1
+                            $<input id="chargetotal" readonly="readonly" name="chargetotal" type=INT size="8" value="<?if($donationAmt != null) echo $donationAmt; else echo '0';?>"/>&nbsp;&nbsp; minimum $1
                             <span class="formError" id="chargetotalError">charge total is required</span>
                             <br/><br/>
                             <select name="cardtype" id="cardtype">
@@ -526,20 +563,32 @@
                                 }
                             }
                     ?>
-                            Street Address <?if(!$shippingDataOkay && $action == "submitPayment" && $streetNeeded == true) echo "<span style='color:red;font-weight:bold;'>*</span>";?><br/>
-                            <input name="shippingstreet" type="text" size="25" value="<?=$shippingstreet?>"/> <br/><br />
-                            City <?if(!$shippingDataOkay && $action == "submitPayment" && $cityNeeded == true) echo "<span style='color:red;font-weight:bold;'>*</span>";?><br/>
-                            <input name="shippingcity" type="text" size="15" value="<?=$shippingcity?>"/> <br/><br />
-                            State <?if(!$shippingDataOkay && $action == "submitPayment" && $stateNeeded == true) echo "<span style='color:red;font-weight:bold;'>*</span>";?><br/>
-                            <input name="shippingstate" type="text" size="2" maxlength="2" value="<?=$shippingstate?>"/> <br/><br />
-                            Zip Code <?if(!$shippingDataOkay && $action == "submitPayment" && $zipNeeded == true) echo "<span style='color:red;font-weight:bold;'>*</span>";?><br/>
-                            <input name="shippingzip" type="text" size="8" maxlength="10" value="<?=$shippingzip?>"/> <br/><br />
-                            Email&nbsp;<em>(for confirmation)</em><?if(!$shippingDataOkay && $action == "submitPayment" && $emailNeeded == true) echo "<span style='color:red;font-weight:bold;'>*</span>";?><br/>
-                            <input name="shippingemail" type="text" size="25" value="<?=$shippingemail?>"/> <br/><br />
+                            Street Address<br/>
+                            <input name="shippingstreet" id="shippingstreet" type="text" size="25" value="<?=$shippingstreet?>"/>
+                            <span class="formError" id="streetError">street address is required</span><br/><br/>
+
+                            City<br/>
+                            <input name="shippingcity" id="shippingcity" type="text" size="15" value="<?=$shippingcity?>"/>
+                            <span class="formError" id="cityError">city is required</span><br/><br/>
+
+                            State<br/>
+                            <input name="shippingstate" id="shippingstate" type="text" size="2" maxlength="2" value="<?=$shippingstate?>"/>
+                            <span class="formError" id="stateError">state is required</span><br/><br/>
+
+                            Zip Code<br/>
+                            <input name="shippingzip" id="shippingzip" type="text" size="8" maxlength="10" value="<?=$shippingzip?>"/>
+                            <span class="formError" id="zipError">zip code is required</span><br/><br/>
+
+                            Email&nbsp;<em>(for confirmation)</em><br/>
+                            <input name="shippingemail" id="shippingemail" type="text" size="25" value="<?=$shippingemail?>"/>
+                            <span class="formError" id="emailError">confirmation email address is required</span><br/><br/>
                             * Claim your reward(s) by checking the reward box
+
+                            <?if ($fldStatus != 'review'){?>
                             <div class="reward">
                                 <div class="num" style="float:right;cursor:pointer;" onClick="confSubmit(document.getElementById('paymentForm'))">Submit Payment</div>
                             </div>
+                            <?}?>
                         </form>
                     </div>
                 </div>

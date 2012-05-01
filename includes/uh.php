@@ -49,6 +49,7 @@
             if($count > $fcount){
                 $fcount = $count;
             }
+            
             return $fcount;
         }
 
@@ -64,6 +65,9 @@
             for($i=1; $i<$finalCount; $i++){
                 if($rewardsDesc[$i] == null){
                     $errors[] = "Description cannot be blank";
+                    break;
+                } else if(strlen($rewardsDesc[$i]) > 200){
+                    $errors[] = "Description cannot be longer than 200 characters";
                     break;
                 }
             }

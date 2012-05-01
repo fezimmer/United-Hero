@@ -2,9 +2,9 @@
 	require_once("preheader.php");
 	include("header.php");
 
-	$submitButtonHTML = "<a href=\"#?w=780\" rel=\"signupForm\" class=\"cta start-project poplight\" title=\"Submit Your Project\">Submit Your Project</a>\n";
+	$submitButtonHTML = "<a href=\"#?w=780\" rel=\"signupForm\" class=\"cta start-project poplight\" title=\"Submit Your Product\">Submit Your Product</a>\n";
 	if(is_logged_in()){
-		$submitButtonHTML = "<a href=\"my_account.php\" class=\"cta start-project\" title=\"Submit Your Project\">Submit Your Project</a>\n";
+		$submitButtonHTML = "<a href=\"my_account.php\" class=\"cta start-project\" title=\"Submit Your Product\">Submit Your Product</a>\n";
 	}
 
         //start pagination code
@@ -67,7 +67,7 @@
 
 			 <div style="clear: both;"></div>
 			<div class="search-results-info">
-				<h2>Browse Projects</h2>
+				<h2>Browse Products</h2>
 			</div>
 			 <div class="boxLine_first_new">
 				<div class="blogTitle_box blogTitle_box_new" id="postsDiv">
@@ -229,7 +229,7 @@
 				<div class="blocked action">
 				<img src="images/start-icon.png" class="icon" />
 				<div class="action-intro">
-					<h2>Start your Project</h2>
+					<h2>Start Your Product</h2>
 					<div style="clear: both;"></div>
 					<!--a href="#" class="cta start-project" title="Submit Your Project">Submit Your Project</a-->
 					<?=$submitButtonHTML?>

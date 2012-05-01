@@ -190,13 +190,14 @@ if ($show != "rewards"){
             $tblRewards->displayAs("fldNumAvailable", "Number Available");
             $tblRewards->displayAs("fldRewardMonth", "Delivery Month");
             $tblRewards->displayAs("fldRewardYear", "Delivery Year");
-            $tblRewards->displayAs("fkPaymentID", "Payment Identifier");
+            $tblRewards->displayAs("fkPaymentID", "Transaction Number");
             $tblRewards->displayAs("fkProjectID", "Project");
             $tblRewards->displayAs("fldStreetAddress", "Street Address");
             $tblRewards->displayAs("fldCity", "City");
             $tblRewards->displayAs("fldState", "State");
             $tblRewards->displayAs("fldZipCode", "Zip");
             $tblRewards->displayAs("fldName", "Name");
+            $tblRewards->displayAs("fldConfEmail", "Email");
             $tblRewards->omitField("fldRewardsLeft");
             $tblRewards->omitField("fldImage");
             $tblRewards->omitField("fldNumAvailable");
@@ -205,6 +206,10 @@ if ($show != "rewards"){
             $tblRewards->addAjaxFilterBox("fldRewardYear");
             $tblRewards->addAjaxFilterBox("fkPaymentID");
             $tblRewards->addAjaxFilterBox("fkProjectID");
+            $tblRewards->addAjaxFilterBox("fldConfEmail");
+            $tblRewards->defineCheckbox("fldShipped");
+            $tblRewards->displayAs("fldShipped", "Product Shipped");
+            $tblRewards->addAjaxFilterBox("fldShipped");
             $tblRewards->disallowAdd();
             $tblRewards->disallowDelete();
             $tblRewards->showTable();

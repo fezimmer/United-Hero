@@ -169,8 +169,8 @@
 
 	}//action = submitPayment
 
-
-	include("header.php");
+        // needs this header due some special formatting
+	include("header_proj.php");
 ?>
 
 <style>
@@ -178,6 +178,8 @@
 		text-decoration: underline;
 	}
 </style>
+                <!--Start Main Container-->
+		<div class="mainContainer" style="width:940px; float:left;">
 
 			<div class="featuredBox details inner-col">
 				<?
@@ -228,7 +230,7 @@
 						}
 					?>
 
-					<div style="clear: both;"></div><br />
+					<br />
 					<iframe src="//www.facebook.com/plugins/like.php?app_id=267526983268917&amp;href=<?=$thisURL?>&amp;send=false&amp;layout=standard&amp;width=450&amp;show_faces=true&amp;action=like&amp;colorscheme=light&amp;font&amp;height=80" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:450px; height:80px;" allowTransparency="true"></iframe>
 
 					<a href="http://twitter.com/share" class="twitter-share-button" data-count="vertical">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
@@ -304,7 +306,7 @@
 						</div>
 
                         </form>
-                        <div style="clear: both"></div>
+
 				</div>
 
 			<h3 class="title">Goal <?=$fldDesiredFundingAmount?></h3>
@@ -330,12 +332,18 @@
 
 					<div class="fb-comments" data-href="<?=$thisURL?>" data-num-posts="2" data-width="340" style="overflow: auto;"></div>
 				</div>
+                        <!--script src="http://static.ak.fbcdn.net/connect.php/js/FB.Share" type="text/javascript"></script-->
+		<script src="http://connect.facebook.net/en_US/all.js#xfbml=1"></script>
+		<script src="http://static.ak.fbcdn.net/connect.php/js/FB.Share" type="text/javascript"></script>
 
 			</div>
+
+
 		  <div>
-			 <div style="clear: both;"></div>
-			<div class="similar">Similar Projects
-				<a href="/browse_projects.php?pageNum=1" class="browse-more">Browse other Projects</a>
+			 <div style="clear: both"></div>
+			<div class="similar">Similar Products
+				<!--a href="/browse_projects.php" class="cta browse-projects" title="Browse Current Products">Browse other Products</a-->
+				<a href="/browse_projects.php?pageNum=1" class="browse-more" style="background-color: #2795D4; color: #000;">Browse other Products</a>
 			</div>
 			 <div class="boxLine_first_new">
 				<div class="blogTitle_box blogTitle_box_new" id="postsDiv">
@@ -350,10 +358,10 @@
 
 			 <? include ('sidebar-featuredproject.inc.php'); ?>
 
-			 <div style="clear: both;"></div>
+
 
 		  </div>
-		</div>
+
 		<!--script src="http://static.ak.fbcdn.net/connect.php/js/FB.Share" type="text/javascript"></script-->
 		<script src="http://connect.facebook.net/en_US/all.js#xfbml=1"></script>
 		<script src="http://static.ak.fbcdn.net/connect.php/js/FB.Share" type="text/javascript"></script>
@@ -362,6 +370,8 @@
 <!-- hidden content for days left modal popup -->
 <div class="popup_block" id="daysLeftPopup">
 	<div style="margin: 5px;">
+
+
 		<p>Each Product has a limited amount of time, Browse Current Products, Reward yourself Today!</p>
 		<!--p>Please view our <a href="#?w=780" rel="guidelinesPopup" title="United Hero Dream/Project Guidelines" class="poplight">guidelines</a></p-->
 		<br />
@@ -370,6 +380,68 @@
 	</div>
 </div>
 
+                </div>
+		<!--End Main Container-->
+
+                <!-- changes added by Forrest Z.-->
+
+
+                <script language="javascript" type="text/javascript">
+                    function checkReward(id, projectId, rewardId){
+                        if( document.getElementById(id).value == "0"){
+                            alert("Sorry, all rewards of type have been claimed.");
+                        }else{
+                            window.location = "/rewards.php?id=" + projectId + "&reward=" + rewardId;
+                        }
+                    }
+                </script>
+                        <!--start rewards div -->
+                    <div class="reward-div">
+                        <!-- begin reward -->
+                        <div class="reward-details">
+                            <h3 class="title">Rewards</h3>
+                        </div>
+                        <?
+                            $rewards = q("SELECT * FROM tblRewards WHERE fkProjectID = \"$projectID\" AND fkPaymentID <= \"0\" ORDER BY pkRewardID");
+                            $count = 1;
+                            foreach ($rewards as $reward){
+                        ?>
+                        <!-- begin reward <?=$count?> -->
+                        <div style="cursor:pointer;" class="reward-details" onclick="checkReward('hiddenReward<?=$count?>', '<?=$projectID?>', '<?=$reward['pkRewardID']?>')">
+                            <div class="reward img-box"><span style="float:left;margin:10px 15px 0 0;color:#2795D4;">$<?=$reward['fldSupport']?></span>
+                                <h3 class="title"><?=$reward['fldTitle']?></h3>
+                                <span class="description"><?=$reward['fldDescription']?></span><br/><br/>
+                                <a onclick="checkReward('hiddenReward<?=$count?>', '<?=$projectID?>', '<?=$reward['pkRewardID']?>')" href="#"><div class="num"><?=$count?>. Reward </div></a>
+                                <div class="claim">
+                                <?
+                                if($reward['fldNumAvailable'] != 0){
+                                    if($reward['fldRewardsLeft'] == 0){
+                                        echo "SOLD OUT";
+                                    }
+                                    else{
+                                        echo ($reward['fldNumAvailable'] - $reward['fldRewardsLeft']) . " Claimed";
+                                    }
+                                }
+                                else{
+                                    $title = $reward['fldTitle'];
+                                    $num = q1("SELECT COUNT(*) FROM tblRewards WHERE fkProjectID = \"$projectID\" AND fkPaymentID > \"0\" AND fldTitle = \"$title\"");
+                                    echo $num . " Claimed";
+                                }
+                                ?>
+                                </div><br/>
+                                <?if($reward['fldImage'] != ""){?>
+                                <img src="/magick.php/<?=$reward['fldImage']?>?resize(170)" alt="REWARD IMAGE <?=$count?>"/>
+                                <?}?>
+                            </div>
+                            <input type="hidden" id="hiddenReward<?=$count?>" value="<?if($reward['fldNumAvailable'] != 0){ echo $reward['fldRewardsLeft']; }?>"/>
+                        </div>
+                        <!-- end reward -->
+                        <?
+                                $count++;
+                            }
+                        ?>
+                    </div>
+                    <!-- end rewards div -->
 <?
 	include("footer.php");
 ?>

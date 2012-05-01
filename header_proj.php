@@ -34,9 +34,9 @@
 		<div class="headerSec">
 		  <div class="logoSec"> <a href="/index.php"><img src="images/uh-logo_2.png" border="0" alt="united hero" /></a> </div>
 
-          <div id ="header_blurb">
-          We are a Global Platform
-			<br/>for Funding Peoples’ Dreams. <a href="#?w=780" rel="learnMorePopup" class="poplight flash" title="Learn More About Hero Account">Learn More!</a>
+          <div id ="header_blurb" style="color: #fff;">
+          HARVARD'S MARKET
+			<br/>Buy or Sell Products. <a href="#?w=780" rel="learnMorePopup" class="poplight flash" title="Learn More About Hero Account">Learn More!</a>
             </div>
 
 		  <div class="headerCTA">
