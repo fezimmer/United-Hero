@@ -5,9 +5,15 @@
 	$userFirstName	= $_SESSION['user_first_name'];
 	$userLastName	= $_SESSION['user_last_name'];
 
-        $projInfo = qr("SELECT * FROM tblProject WHERE fkUserID = $userID ORDER BY fldDateCreated DESC LIMIT 1");
-        extract($projInfo);
-        $id = $projInfo['pkProjectID'];
+	$projInfo = qr("SELECT * FROM tblProject WHERE fkUserID = $userID ORDER BY fldDateCreated DESC LIMIT 1");
+
+	if (is_array($projInfo)){
+		extract($projInfo);
+	}
+	else{
+		//exit();
+	}
+	$id = $projInfo['pkProjectID'];
 
 	//reward readonly bool
 	$readOnlyKeyword = true;
@@ -93,7 +99,7 @@
 
 	//count Number of rewards
 	$finalCount = rewardCount($rewardsTitle, $rewardsDesc, $rewardsSupport, $rewardsImage, $rewardsDelete);
-        
+
 	//fill array of reward errors
 	$reward_errors = checkRewards($finalCount, $rewardsTitle, $rewardsDesc, $rewardsAvail, $rewardsSupport, $rewardsMonth, $rewardsYear);
 	//end reward info
@@ -327,7 +333,7 @@
                     		<a class="bigLinks" href="/project.php?id=<?=$projectID?>">view your product</a><br />
                     		<?
                     			if ($fldStatus == 'unapproved'){
-                    				echo "<a href=\"submit-project.php\">submit a new project</a><br />\n";
+                    				echo "<a href=\"submit-project.php\" class='bigLinks'>submit a new project</a><br />\n";
                     			}
                     		?>
                                 <a class="bigLinks" href="/reward-sales.php?id=<?=$projectID?>">view sold rewards</a><br/>

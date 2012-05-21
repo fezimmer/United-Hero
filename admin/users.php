@@ -166,7 +166,12 @@
     }
 
 	function displaySimpleDate($value){
-		return makeSimpleDate($value);
+		if ($value){
+			return makeSimpleDate($value);
+		}
+		else{
+			return "N/A";
+		}
 	}
 
 ?>

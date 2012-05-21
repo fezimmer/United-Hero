@@ -1,30 +1,32 @@
 <?
 	//count Number of rewards submitted through _POST
 	$finalCount = rewardCount($rewardsTitle, $rewardsDesc, $rewardsSupport, $rewardsImage, $rewardsDelete);
-        
-        //add rewards already in database
+
+       //add rewards already in database
 	if($finalCount == 1){
-            $finalCount += q1("SELECT COUNT(*) FROM tblRewards WHERE fkProjectID = \"$id\" AND fkPaymentID <= \"0\"");
+		$finalCount += q1("SELECT COUNT(*) FROM tblRewards WHERE fkProjectID = \"$id\" AND fkPaymentID <= \"0\"");
 	}
 
-        if($reward_errors == null){
-            //don't show save rewards button
-            $rewardsSave = "none";
-        } else {
-            //validation errors occured
-            $rewardsSave = "block";
-        }
+	if($reward_errors == null){
+		//dont show save rewards button
+		$rewardsSave = "none";
+	} else {
+		//validation errors occured
+		$rewardsSave = "block";
+	}
 
-        //set if rewards should be readonly
-        $readOnly = "";
-        if($readOnlyKeyword){
-            $readOnly = "readonly=\"readonly\"";
-            $disabled = "disabled=\"disabled\"";
-        }
+	//set if rewards should be readonly
+	$readOnly = "";
+	if($readOnlyKeyword){
+		$readOnly = "readonly=\"readonly\"";
+		$disabled = "disabled=\"disabled\"";
+	}
+        if($finalCount == 1) $rewardNum = 2;
+        else  $rewardNum = $finalCount;
 ?>
 
 <script language="javascript" type="text/javascript">
-    var rewardNum = <?=$finalCount?>;
+    var rewardNum = <?=$rewardNum?>;
 
     $(document).ready(function() {
         $("a#addlink").click(function(){
@@ -32,11 +34,12 @@
             if(rewardNum > 7){
                 alert("Maximum Rewards reached");
             }else{
-                $("#linkList").append("<!-- begin reward --><div class='reward-details' id='r" + rewardNum + "'>" + "<div style='width:47%;float:right;cursor:pointer;cursor:hand;'><a id='removal" + rewardNum + "' removalhref='#' onclick=\"removeReward('r" + rewardNum + "')\">Click to Remove&nbsp;&nbsp;</a></div>Title*<br/><" + "input type='text' name='rewardTitle" + rewardNum + "' id='rewardTitle" + rewardNum + "' size='23'/><br/><br/>Description*<br/><" + "textarea name='rewardDesc" + rewardNum + "' id='rewardDesc" + rewardNum + "' cols='23' rows='5'></textarea><br/><br/><div style='width:48%; float:left;margin-top:4px;'>" + "Purchase Price*<br/>" + "$<" + "input type='text' name='rewardSupport" + rewardNum + "' id='rewardSupport" + rewardNum + "' size='5'/><br/></div><br/><div style='width:52%; float:right;'>Limit # Available<" + "input type='checkbox' id='limitAvail" + rewardNum + "' name='limitAvail" + rewardNum + "' onclick='changeAvailBox(\"limitAvail" + rewardNum + "\", \"numAvailable" + rewardNum + "\")'><" + "input style='display:none;' type='text' name='numAvailable" + rewardNum + "' id='numAvailable" + rewardNum + "' size='5' maxlength='5'/></div><" + "span style='margin-left:7px;'><div>&nbsp;</div>Est. Shipping Date*<br/><" + "select name='rewardMonth" + rewardNum + "' id='rewardMonth" + rewardNum + "'><option value='' SELECTED>Month*</option><" + "option value='01'>JANUARY (01)</option><option value='02'>FEBRUARY (02)</option><" + "option value='03'>March (03)</option><option value='04'>APRIL (04)</option><" + "option value='05'>MAY (05)</option><option value='06'>JUNE (06)</option><" + "option value='07'>JULY (07)</option><option value='08'>AUGUST (08)</option><" + "option value='09'>SEPTEMBER (09)</option><option value='10'>OCTOBER (10)</option><" + "option value='11'>NOVEMBER (11)</option><option value='12'>DECEMBER (12)</option></select>&nbsp;" + "</span><" + "span style='margin-left:7px;'><" + "select name='rewardYear" + rewardNum + "' id='rewardYear" + rewardNum + "'><option value='' SELECTED>Year*</option><option value='2012'>2012</option><" + "option value='2013'>2013</option><option value='2014'>2014</option><option value='2015'>2015</option><" + "option value='2016'>2016</option><option value='2017'>2017</option><option value='2018'>2018</option><" + "option value='2019'>2019</option><option value='2020'>2020</option><option value='2021'>2021</option></select><" + "/span><br/><br/>Image Upload<" + "input type='file' size='15' name='rewardImage" + rewardNum + "' id='rewardImage" + rewardNum + "'/><br/></div><!-- end reward -->");
+                $("#linkList").append("<!-- begin reward --><div class='reward-details' id='r" + rewardNum + "'>" + "<div style='width:47%;float:right;cursor:pointer;cursor:hand;'><a id='removal" + rewardNum + "' removalhref='#' onclick=\"removeReward('r" + rewardNum + "')\">Click to Remove&nbsp;&nbsp;</a></div>Title*<br/><" + "input type='text' name='rewardTitle" + rewardNum + "' id='rewardTitle" + rewardNum + "' size='23'/><br/><br/>Description*<br/><" + "textarea name='rewardDesc" + rewardNum + "' id='rewardDesc" + rewardNum + "' cols='23' rows='5' maxlength='200'></textarea><br/><br/><div style='width:48%; float:left;margin-top:4px;'>" + "Purchase Price*<br/>" + "$<" + "input type='text' name='rewardSupport" + rewardNum + "' id='rewardSupport" + rewardNum + "' size='5'/><br/></div><div style='width:52%; float:right;'>Limit # Available<" + "input type='checkbox' id='limitAvail" + rewardNum + "' name='limitAvail" + rewardNum + "' onclick='changeAvailBox(\"limitAvail" + rewardNum + "\", \"numAvailable" + rewardNum + "\")'><" + "input style='display:none;' type='text' name='numAvailable" + rewardNum + "' id='numAvailable" + rewardNum + "' size='5' maxlength='5'/></div><" + "span style='margin-left:7px;'><div>&nbsp;</div>Est. Shipping Date*<br/><" + "select name='rewardMonth" + rewardNum + "' id='rewardMonth" + rewardNum + "'><option value='' SELECTED>Month*</option><" + "option value='01'>JANUARY (01)</option><option value='02'>FEBRUARY (02)</option><" + "option value='03'>March (03)</option><option value='04'>APRIL (04)</option><" + "option value='05'>MAY (05)</option><option value='06'>JUNE (06)</option><" + "option value='07'>JULY (07)</option><option value='08'>AUGUST (08)</option><" + "option value='09'>SEPTEMBER (09)</option><option value='10'>OCTOBER (10)</option><" + "option value='11'>NOVEMBER (11)</option><option value='12'>DECEMBER (12)</option></select>&nbsp;" + "</span><" + "span style='margin-left:7px;'><" + "select name='rewardYear" + rewardNum + "' id='rewardYear" + rewardNum + "'><option value='' SELECTED>Year*</option><option value='2012'>2012</option><" + "option value='2013'>2013</option><option value='2014'>2014</option><option value='2015'>2015</option><" + "option value='2016'>2016</option><option value='2017'>2017</option><option value='2018'>2018</option><" + "option value='2019'>2019</option><option value='2020'>2020</option><option value='2021'>2021</option></select><" + "/span><br/><br/>Image Upload<" + "input type='file' size='15' name='rewardImage" + rewardNum + "' id='rewardImage" + rewardNum + "'/><br/></div><!-- end reward -->");
                 if(rewardNum > 1){
                     document.getElementById('removal'+(rewardNum-1)).style.display = 'none';
                 }
                 rewardNum++;
+                return false;
             }
         });
      });
@@ -50,13 +53,18 @@
         }
     }
     function removeReward(id, deleteID){
-        $("#deleteList").append("<input type='hidden' name='deleteReward" + (rewardNum-1) + "' value='" + deleteID + "'/>");
+        $("#deleteList").append("<input type='hidden' id='deleteReward" + (rewardNum-1) + "' name='deleteReward" + (rewardNum-1) + "' value='" + deleteID + "'/>");
         document.getElementById(id).parentNode.removeChild(document.getElementById(id));
         rewardNum--;
         document.getElementById('removal'+(rewardNum-1)).style.display = 'block';
+        return false;
     }
 </script>
-
+<style>
+    .title a:hover{
+        text-decoration: underline;
+    }
+</style>
  <!-- start rewards section -->
 	<div class="reward-div">
             <div class="reward-details">
@@ -69,10 +77,15 @@
 
             <div id="linkList">
                 <?
+
                     //grab reward values from db
                     $reward = q("SELECT * FROM tblRewards WHERE fkProjectID = \"$id\" AND fkPaymentID <= \"0\" ORDER BY pkRewardID");
                     $count = 0;
-                    for($i=1;$i<$finalCount;$i++){
+                    $i = 1;
+                    if($finalCount == 1 && !$readOnlyKeyword){
+                        echo ("<!-- begin reward --><div class='reward-details' id='r".$i . "'>" . "<div style='width:47%;float:right;cursor:pointer;cursor:hand;'><a id='removal" . $i . "' removalhref='#' onclick=\"removeReward('r" . $i . "')\">Click to Remove&nbsp;&nbsp;</a></div>Title*<br/><" . "input type='text' name='rewardTitle" . $i . "' id='rewardTitle" . $i . "' size='23'/><br/><br/>Description*<br/><" . "textarea name='rewardDesc" . $i . "' id='rewardDesc" . $i . "' cols='23' rows='5'></textarea><br/><br/><div style='width:48%; float:left;margin-top:4px;'>" . "Purchase Price*<br/>" . "$<" . "input type='text' name='rewardSupport" . $i . "' id='rewardSupport" . $i . "' size='5'/><br/></div><br/><div style='width:52%; float:right;'>Limit # Available<" . "input type='checkbox' id='limitAvail" . $i . "' name='limitAvail" . $i . "' onclick='changeAvailBox(\"limitAvail" . $i . "\", \"numAvailable" . $i . "\")'><" . "input style='display:none;' type='text' name='numAvailable" . $i . "' id='numAvailable" . $i . "' size='5' maxlength='5'/></div><" . "span style='margin-left:7px;'><div>&nbsp;</div>Est. Shipping Date*<br/><" . "select name='rewardMonth" . $i . "' id='rewardMonth" . $i . "'><option value='' SELECTED>Month*</option><" . "option value='01'>JANUARY (01)</option><option value='02'>FEBRUARY (02)</option><" . "option value='03'>March (03)</option><option value='04'>APRIL (04)</option><" . "option value='05'>MAY (05)</option><option value='06'>JUNE (06)</option><" . "option value='07'>JULY (07)</option><option value='08'>AUGUST (08)</option><" . "option value='09'>SEPTEMBER (09)</option><option value='10'>OCTOBER (10)</option><" . "option value='11'>NOVEMBER (11)</option><option value='12'>DECEMBER (12)</option></select>&nbsp;" . "</span><" . "span style='margin-left:7px;'><" . "select name='rewardYear" . $i . "' id='rewardYear" . $i . "'><option value='' SELECTED>Year*</option><option value='2012'>2012</option><" . "option value='2013'>2013</option><option value='2014'>2014</option><option value='2015'>2015</option><" . "option value='2016'>2016</option><option value='2017'>2017</option><option value='2018'>2018</option><" . "option value='2019'>2019</option><option value='2020'>2020</option><option value='2021'>2021</option></select><" . "/span><br/><br/>Image Upload<" . "input type='file' size='15' name='rewardImage" . $i . "' id='rewardImage" . $i . "'/><br/></div><!-- end reward -->");
+                    }
+                    for($i;$i<$finalCount;$i++){
                         //attempt to pull reward info from db
                         $rwd = $reward[$count];
                         $fileName = null;
@@ -94,23 +107,26 @@
                         /*echo "Title: " . $rewardsTitle[$i] . ", Desc: " . $rewardsDesc[$i] . ", Supp: " . $rewardsSupport[$i] .
                             ", Avail: " . $rewardsAvail[$i] . ", Month: " . $rewardsMonth[$i] . ", Year: " . $rewardsYear[$i] .
                             ", Image: " . $fileName . ", ID: " . $rewardID;*/
-                        
+
                         echo "<!-- begin reward -->" .
-                            "<div class='reward-details' id='r" . $i . "'>" .
-                            "    <div style='width:47%;float:right;cursor:pointer;cursor:hand;'><a ";
+                            "<div class='reward-details' id='r" . $i . "'>";
+                    if($readOnly == "") {
+                        echo "    <div style='width:47%;float:right;cursor:pointer;cursor:hand;'><a ";
                         if(($finalCount - $i) == 1 && $submitPage != "my_account.php"){
                             echo "style='display:block;'";
                         }else{
                             echo "style='display:none;'";
                         }
                         echo " id='removal".$i."' href='#' onclick=\"removeReward('r" . $i . "', '" . $rewardID . "')\">Click to Remove&nbsp;&nbsp;</a>" .
-                            "</div>    Title*<br/>" .
+                            "</div>";
+                    }
+                        echo "Title*<br/>" .
                             "    <input value='" .$rewardsTitle[$i] . "' type='text'";
                         echo $readOnly;
                             echo "name='rewardTitle" . $i . "' id='rewardTitle" . $i . "' size='23'/><br/><br/>" .
                             "    Description*<br/><textarea name='rewardDesc" . $i . "'";
                             echo $readOnly;
-                            echo "id='rewardDesc" . $i . "' cols='23' rows='5'>";
+                            echo "id='rewardDesc" . $i . "' cols='23' rows='5' maxlength='200'>";
                         if($rewardsDesc[$i] != '' && $rewardsDesc[$i] != null)echo $rewardsDesc[$i];
                         echo "</textarea><br/><br/>" .
                             "    <div style='width:48%; float:left;margin-top:4px;'>" .
@@ -121,7 +137,7 @@
                             "    </div>" .
                             "    <div style='width:52%; float:right;'>";
                     if($readOnly != ""){
-                        echo "<p style='margin-top:3px; '>&nbsp;</p>";
+                        echo "<p style='margin-top:3px; '>Limit # Available</p>";
                     }else{
                                 echo "        Limit # Available<input type='checkbox' ";
                         if($rewardsAvail[$i] == 0){
@@ -192,7 +208,8 @@
                             $fileName = q1("SELECT fldImage FROM tblRewards WHERE pkRewardID = \"$rewardID\" AND fkProjectID = \"$id\"");
                         }
                         if($fileName != null){
-                            echo "Current Image: " . $fileName . "<br/>";
+                            //echo "Current Image: " . $fileName . "<br/>";
+                            echo "<img src=\"/magick.php/$fileName\" width=\"100\" />\n";
                         }
                         echo "<br/><input type='hidden' name='rewardpkID" . $i . "' value='" . $rewardID . "'/>";
 

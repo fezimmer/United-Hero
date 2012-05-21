@@ -8,8 +8,7 @@
 	$creatorInfo	= qr("SELECT fldFName, fldLName, fldEmail FROM tblUser WHERE pkUserID = $userID");
 	$creatorName	= $creatorInfo['fldFName'];
 	$creatorEmail	= $creatorInfo['fldEmail'];
-
-
+        
 	include("header.php");
 
 ?>

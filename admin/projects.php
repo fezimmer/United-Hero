@@ -179,8 +179,12 @@ if ($show != "rewards"){
 
     //rewards section
     if ($show == "rewards"){
-            $reward_where_condition = "WHERE fkPaymentID > \"0\"";
-            $h1 = "You are viewing all <u>supported rewards</u> projects.";
+            $projectID 	= $_REQUEST['pkProjectID'];
+            if($projectID != null){
+                $singleRewardMsg = " AND fkProjectID = \"" . $projectID . "\"";
+            }
+            $reward_where_condition = "WHERE fkPaymentID > \"0\"" . $singleRewardMsg;
+            $h1 = "You are viewing <u>supported rewards</u>.";
 
             $tblRewards->omitPrimaryKey();
             $tblRewards->addWhereClause($reward_where_condition);

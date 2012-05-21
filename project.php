@@ -323,7 +323,7 @@
 
 				<? 	if (!$projectExpired && $fldStatus == 'approved'){?>
 				<div class="project-cta">
-					<a href="#" class="support" onClick="$('#paymentDiv').slideDown();$('#socialWidgets').hide();">Support this Project</a>
+                                    <a href="/rewards.php?id=<?=$projectID?>" class="support"> <!--  onClick="$('#paymentDiv').slideDown();$('#socialWidgets').hide();"-->Support this Project</a>
 				</div>
 				<?	}?>
 				<div class="more-details" id="socialWidgets">

@@ -14,36 +14,44 @@
         function rewardCount($title, $description, $support, $image, $deletion){
             $fcount = 1;
             $count = 1;
-            foreach($title as $x){
-                if($x != "" && $x != null){
-                    $count++;
+            if($title != null){
+                foreach($title as $x){
+                    if($x != "" && $x != null){
+                        $count++;
+                    }
                 }
             }
             if($count > $fcount){
                 $fcount = $count;
             }
             $count = 1;
-            foreach($description as $x){
-                if($x != "" && $x != null){
-                    $count++;
+            if($description != null){
+                foreach($description as $x){
+                    if($x != "" && $x != null){
+                        $count++;
+                    }
                 }
             }
             if($count > $fcount){
                 $fcount = $count;
             }
             $count = 1;
-            foreach($support as $x){
-                if($x != "" && $x != null){
-                    $count++;
+            if($support != null){
+                foreach($support as $x){
+                    if($x != "" && $x != null){
+                        $count++;
+                    }
                 }
             }
             if($count > $fcount){
                 $fcount = $count;
             }
             $count = 1;
-            foreach($image as $x){
-                if($x != "" && $x != null){
-                    $count++;
+            if($image != null){
+                foreach($image as $x){
+                    if($x != "" && $x != null){
+                        $count++;
+                    }
                 }
             }
             if($count > $fcount){
