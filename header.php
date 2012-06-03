@@ -20,6 +20,8 @@
 	<script src="js/modal.js" type="text/javascript"> </script>
 	<script src="js/tipsy.js" type="text/javascript"> </script>
 	<script src="js/globalFunctions.js" type="text/javascript"> </script>
+        <script src="http://code.jquery.com/jquery-latest.js"></script>
+        <script type="text/javascript" src="http://jzaefferer.github.com/jquery-validation/jquery.validate.js"></script>
 
 	<style>
 		a.flash:hover{
@@ -52,7 +54,7 @@
 
 		  <div class="headerCTA">
 		  	<?	if(!is_logged_in()){?>
-		  			<a href="#?w=400" rel="loginForm" class="login poplight" title="Login to Your Account">Login</a>
+		  			<a href="/login.php" rel="loginForm" class="login poplight" title="Login to Your Account">Login</a>
 		  			<a href="#?w=780" rel="signupForm" class="signup poplight" title="United Hero Account Creation">Signup</a>
 		  	<? 	}
 		  		else{?>

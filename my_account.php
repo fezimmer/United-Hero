@@ -1,6 +1,63 @@
-<?
+<?php
 	require_once("preheader.php");
 	require_login();
+
+	/* this section is added to support ajax file/image uploading */
+
+	// filesystem path
+	$upload_dir = $_SERVER['DOCUMENT_ROOT'] . "/project_images"; // Directory for file storing
+
+	// FILEFRAME section of the script
+	if (isset($_POST['fileframe']) && $_POST['fileframe'] == "true")
+	{
+		$result = 'ERROR';
+		$result_msg = 'No FILE field found';
+
+		$activeIndex = $_POST['activeIndex'];
+		if (isset($_FILES["rewardImageFile{$activeIndex}"]))  // file was send from browser
+		{
+			if ($_FILES["rewardImageFile{$activeIndex}"]["error"] == UPLOAD_ERR_OK)  // no error
+			{
+				//$filename = $_FILES['rewardImageFile']['name']; // file name
+				$filename = date("Ymdhi") . "_" . make_filename_safe($_FILES["rewardImageFile{$activeIndex}"]["name"]);
+				move_uploaded_file($_FILES["rewardImageFile{$activeIndex}"]["tmp_name"], $upload_dir.'/'.$filename);
+				$result = 'OK';
+			}
+			elseif ($_FILES["rewardImageFile{$activeIndex}"]["error"] == UPLOAD_ERR_INI_SIZE){
+				$result_msg = 'The uploaded file exceeds the upload_max_filesize directive';
+			}
+			else{
+				$result_msg = 'Unknown error';
+			}
+		}
+
+		// This is a PHP code outputing Javascript code.
+		echo '<html><head><title>-</title></head><body>';
+		echo '<script language="JavaScript" type="text/javascript">'."\n";
+		echo 'var parDoc = window.parent.document;';
+		// this code is outputted to IFRAME (embedded frame)
+		// main page is a 'parent'
+
+		if ($result == 'OK')
+		{
+			// Simply updating status of fields and submit button
+			//echo 'parDoc.getElementById("upload_status").value = "file successfully uploaded";';
+			//echo 'parDoc.getElementById("filename").value = "'.$filename.'";';
+			echo "parDoc.getElementById(\"rewardImage{$activeIndex}\").value = \"" . $filename . "\";";
+			echo "parDoc.getElementById(\"imagePlaceholder{$activeIndex}\").innerHTML = \"<img src='/magick.php/" . $filename . "?resize(100)' width='100'>\"";
+			//echo 'parDoc.getElementById("upload_button").disabled = false;';
+		}
+		else
+		{
+			//echo 'parDoc.getElementById("upload_status").value = "ERROR: '.$result_msg.'";';
+		}
+
+		echo "\n".'</script></body></html>';
+
+		exit(); // do not go futher
+	}
+	// FILEFRAME section END
+
 	$userID 		= $_SESSION['user_id'];
 	$userFirstName	= $_SESSION['user_first_name'];
 	$userLastName	= $_SESSION['user_last_name'];
@@ -81,156 +138,95 @@
 	$rewardsImage[6]    = $_POST["rewardImage6"];
 	$rewardsImage[7]    = $_POST["rewardImage7"];
 
-	$rewardsID[1]    = $_POST["rewardpkID1"];
-	$rewardsID[2]    = $_POST["rewardpkID2"];
-	$rewardsID[3]    = $_POST["rewardpkID3"];
-	$rewardsID[4]    = $_POST["rewardpkID4"];
-	$rewardsID[5]    = $_POST["rewardpkID5"];
-	$rewardsID[6]    = $_POST["rewardpkID6"];
-	$rewardsID[7]    = $_POST["rewardpkID7"];
+	$rewardsID[1]    	= $_POST["rewardpkID1"];
+	$rewardsID[2]    	= $_POST["rewardpkID2"];
+	$rewardsID[3]    	= $_POST["rewardpkID3"];
+	$rewardsID[4]    	= $_POST["rewardpkID4"];
+	$rewardsID[5]    	= $_POST["rewardpkID5"];
+	$rewardsID[6]    	= $_POST["rewardpkID6"];
+	$rewardsID[7]    	= $_POST["rewardpkID7"];
 
-	$rewardsDelete[1]    = $_POST["deleteReward1"];
-	$rewardsDelete[2]    = $_POST["deleteReward2"];
-	$rewardsDelete[3]    = $_POST["deleteReward3"];
-	$rewardsDelete[4]    = $_POST["deleteReward4"];
-	$rewardsDelete[5]    = $_POST["deleteReward5"];
-	$rewardsDelete[6]    = $_POST["deleteReward6"];
-	$rewardsDelete[7]    = $_POST["deleteReward7"];
+	$rewardsDelete[1]	= $_POST["deleteReward1"];
+	$rewardsDelete[2]	= $_POST["deleteReward2"];
+	$rewardsDelete[3]	= $_POST["deleteReward3"];
+	$rewardsDelete[4]	= $_POST["deleteReward4"];
+	$rewardsDelete[5]	= $_POST["deleteReward5"];
+	$rewardsDelete[6]	= $_POST["deleteReward6"];
+	$rewardsDelete[7]	= $_POST["deleteReward7"];
 
 	//count Number of rewards
 	$finalCount = rewardCount($rewardsTitle, $rewardsDesc, $rewardsSupport, $rewardsImage, $rewardsDelete);
 
 	//fill array of reward errors
-	$reward_errors = checkRewards($finalCount, $rewardsTitle, $rewardsDesc, $rewardsAvail, $rewardsSupport, $rewardsMonth, $rewardsYear);
+	//$reward_errors = checkRewards($finalCount, $rewardsTitle, $rewardsDesc, $rewardsAvail, $rewardsSupport, $rewardsMonth, $rewardsYear);
 	//end reward info
 
-        $rewardSuccess = true;
+	$rewardSuccess = true;
 	$action = $_REQUEST['action'];
-	//&& ($_POST['fldTerms'] == 1)
+
 	if ($action == 'submitProject'){
-                if($reward_errors == null){
-                    $imgName = basename($_FILES['fldImage']['name']);
-                    $imgSize = $_FILES['fldImage']['size'];
-                    $allowed_ext = "jpg,jpeg,gif,png,bmp";
-                    $match = "0";
-                    if($imgSize > 0) {
-                            $img_ext = preg_split("/\./", $imgName);
-                            $allowed_exts = preg_split("/\,/", $allowed_ext);
-                            foreach ($allowed_exts as $ext) {
-                                    if ($ext == strtolower(end($img_ext))) {
-                                            $match = "1"; // File is allowed
-                                            $tmp_file = $_FILES['fldImage']['tmp_name'];
-                                            $newFilename = make_filename_safe($imgName);
-                                            $img_path = "project_images/" . $newFilename;
-                                            if (!file_exists($img_path)) {
-                                                    if (move_uploaded_file($tmp_file, $img_path) == false) {
-                                                            $error_msg[] = "Error uploading image. Please check filesize.";
-                                                    }
-                                                    else {
-                                                            extract($_POST);
-                                                            $fldDesiredFundingAmount = stripNonNumeric($fldDesiredFundingAmount);
-                                                            $success = qr("INSERT INTO tblProject (fldTitle, fldDescription, fldLocation, fldDesiredFundingAmount, fldVideoHTML, fldTags, fldActualFunding, fldStatus, fldDateCreated, fkUserID, fldImage) VALUES(
-                                                                                                                            \"$fldTitle\", \"$fldDescription\", \"$fldLocation\", \"$fldDesiredFundingAmount\", \"$fldVideoHTML\", \"$fldTags\", 0, \"review\", NOW(), $userID, \"$newFilename\")");
+		if($reward_errors == null){
+			extract($_POST);
+			$fldDesiredFundingAmount = stripNonNumeric($fldDesiredFundingAmount);
 
-                                                            //upload reward images and add rewards to db
-                                                            $projectID = q1("SELECT pkProjectID FROM tblProject WHERE fldTitle = \"$fldTitle\"");
-                                                            for($i=1; $i<$finalCount; $i++){
-                                                                $rSuccess = false;
-                                                                $rAction = "INSERT";
-                                                                $imgName2 = basename($_FILES['rewardImage'. $i]['name']);
-                                                                $imgSize2 = $_FILES['rewardImage'. $i]['size'];
-                                                                $match2 = "0";
-                                                                if($imgSize2 > 0) {
-                                                                    $img_ext2 = preg_split("/\./", $imgName2);
-                                                                    $allowed_ext2s = preg_split("/\,/", $allowed_ext);
-                                                                    foreach ($allowed_ext2s as $ext) {
-                                                                        if ($ext == strtolower(end($img_ext2))) {
-                                                                            $match2 = "1"; // File is allowed
-                                                                            $tmp_file2 = $_FILES['rewardImage'. $i]['tmp_name'];
-                                                                            $newFilename2 = make_filename_safe($imgName2);
-                                                                            $img_path2 = "project_images/" . $newFilename2;
-                                                                            if (!file_exists($img_path2)) {
-                                                                                if (move_uploaded_file($tmp_file2, $img_path2) == false) {
-                                                                                        $error_msg[] = "ERROR WITH REWARD: Please check image: " . $imgName2 ." filesize.";
-                                                                                }else{
-                                                                                    //check if reward exists
-                                                                                    if($rewardsID[$i] != null){
-                                                                                        //update reward
-                                                                                        $rSuccess = qr("UPDATE tblRewards SET fldTitle = \"$rewardsTitle[$i]\", fldDescription = \"$rewardsDesc[$i]\", fldSupport = \"$rewardsSupport[$i]\",
-                                                                                                fldNumAvailable = \"$rewardsAvail[$i]\", fldRewardMonth = \"$rewardsMonth[$i]\", fldRewardYear = \"$rewardsYear[$i]\", fldImage = \"$newFilename2\",
-                                                                                                fkProjectID = \"$id\" WHERE pkRewardID = \"$rewardsID[$i]\"");
-                                                                                    }else{
-                                                                                        //full insert
-                                                                                        $rSuccess = qr("INSERT INTO tblRewards (fldTitle, fldDescription, fldSupport, fldNumAvailable, fldRewardMonth, fldRewardYear, fldImage, fkProjectID, fldRewardsLeft) VALUES(
-                                                                                                                               \"$rewardsTitle[$i]\", \"$rewardsDesc[$i]\", \"$rewardsSupport[$i]\", \"$rewardsAvail[$i]\", \"$rewardsMonth[$i]\", \"$rewardsYear[$i]\", \"$newFilename2\", \"$id\", \"$rewardsAvail[$i]\")");
-                                                                                    }
-                                                                                    if($rSuccess){
-                                                                                        $report_msg[] = "Reward: " . $rewardsTitle[$i]. " was successfully added";
-                                                                                    }
-                                                                                }
-                                                                            }else{
-                                                                                $error_msg[] = "ERROR WITH REWARD: Filename " . $imgName2 . " already exists. Please rename and try again.";
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                    if (!$match2) {
-                                                                        $error_msg[] = "ERROR WITH REWARD: " . $imgName2 . " is not of type jpg, jpeg, gif, png, or bmp.";
-                                                                    }
-                                                                }else{
-                                                                    //don't overwrite image
-                                                                    //check if reward exists
-                                                                    if($rewardsID[$i] != null){
-                                                                        //update reward
-                                                                        $rSuccess = qr("UPDATE tblRewards SET fldTitle = \"$rewardsTitle[$i]\", fldDescription = \"$rewardsDesc[$i]\", fldSupport = \"$rewardsSupport[$i]\",
-                                                                                fldNumAvailable = \"$rewardsAvail[$i]\", fldRewardMonth = \"$rewardsMonth[$i]\", fldRewardYear = \"$rewardsYear[$i]\",
-                                                                                fkProjectID = \"$id\" WHERE pkRewardID = \"$rewardsID[$i]\"");
-                                                                    }else{
-                                                                        //full insert
-                                                                        $rSuccess = qr("INSERT INTO tblRewards (fldTitle, fldDescription, fldSupport, fldNumAvailable, fldRewardMonth, fldRewardYear, fkProjectID, fldRewardsLeft) VALUES(
-                                                                                                               \"$rewardsTitle[$i]\", \"$rewardsDesc[$i]\", \"$rewardsSupport[$i]\", \"$rewardsAvail[$i]\", \"$rewardsMonth[$i]\", \"$rewardsYear[$i]\", \"$id\", \"$rewardsAvail[$i]\")");
-                                                                    }
-                                                                    if($rSuccess){
-                                                                        $report_msg[] = "Reward: " . $rewardsTitle[$i]. " was successfully added";
-                                                                    }
-                                                                }
-                                                                if(!$rSuccess){
-                                                                    $rewardSuccess = false;
-                                                                }
-                                                            }
-                                                            if ($success && $rewardSuccess){
-                                                                    //send email
-                                                                    $email_template_params = array();
-                                                                    $email_template_params['FULLNAME']  = $creatorName;
+			$tmp_file = $_FILES['fldImage']['tmp_name'];
+			$imgName = basename($_FILES['fldImage']['name']);
+			$projectImageName = make_filename_safe($imgName);
+			$img_path = "project_images/" . $projectImageName;
 
-                                                                    $to_email = $creatorEmail;
-                                                                    $subject = "Thank you for your project submission";
+			if (!move_uploaded_file($tmp_file, $img_path)) {
+				$error_msg[] = "There was an error uploading main product image. Please try again.";
+			}
+			else{
+				//IF project image is valid (really the only required field) then add the project
+				$success = qr("INSERT INTO tblProject (fldTitle, fldDescription, fldLocation, fldDesiredFundingAmount, fldVideoHTML, fldTags, fldActualFunding, fldStatus, fldDateCreated, fkUserID, fldImage) VALUES(
+																																\"$fldTitle\", \"$fldDescription\", \"$fldLocation\", \"$fldDesiredFundingAmount\", \"$fldVideoHTML\", \"$fldTags\", 0, \"review\", NOW(), $userID, \"$projectImageName\")");
+				//$projectID = q1("SELECT pkProjectID FROM tblProject WHERE fldTitle = \"$fldTitle\"")
+				$projectID = mysql_insert_id(); //projectID is the last inserted ID
 
-                                                                    $success = send_email_from_template("project-review-letter.html",$to_email,$subject,$email_template_params, 1, $globals['emails_from']);
-                                                                    if ($success){
-                                                                            $report_msg[] = "Your project was successfully added.";
-                                                                    }
-                                                                    else{
-                                                                            $error_msg[] = "Your project was added to our database, but we could not email you a confirmation for some reason.";
-                                                                    }
-                                                            }
-                                                            else {
-                                                                    $error_msg[] = "There was an error adding your project.";
-                                                            }
-                                                    }
-                                            }
-                                            else {
-                                                    $error_msg[] = "ERROR: IMAGE ". $img_path ." ALREADY EXISTS - Please rename the file and try again";
-                                            }
-                                    }
-                            }
-                            if (!$match) {
-                                    $error_msg[] = "ERROR: File type isn't allowed: $imgName";
-                            }
-                    }
-                    else {
-                            $error_msg[] = "ERROR: No project image selected.";
-                    }
-                }
+				//upload reward images and add rewards to db
+				for($i=1; $i<$finalCount; $i++){
+					$rSuccess = false;
+
+					//check if reward exists
+					if($rewardsID[$i] != null){
+						//update reward
+						$rSuccess = qr("UPDATE tblRewards SET fldTitle = \"$rewardsTitle[$i]\", fldDescription = \"$rewardsDesc[$i]\", fldSupport = \"$rewardsSupport[$i]\",
+								fldNumAvailable = \"$rewardsAvail[$i]\", fldRewardMonth = \"$rewardsMonth[$i]\", fldRewardYear = \"$rewardsYear[$i]\", fldImage = \"$rewardsImage[$i]\",
+								fkProjectID = \"$id\" WHERE pkRewardID = \"$rewardsID[$i]\"");
+					}else{
+						//insert reward
+						$rSuccess = qr("INSERT INTO tblRewards (fldTitle, fldDescription, fldSupport, fldNumAvailable, fldRewardMonth, fldRewardYear, fldImage, fkProjectID, fldRewardsLeft) VALUES(
+															   \"$rewardsTitle[$i]\", \"$rewardsDesc[$i]\", \"$rewardsSupport[$i]\", \"$rewardsAvail[$i]\", \"$rewardsMonth[$i]\", \"$rewardsYear[$i]\", \"$rewardsImage[$i]\", \"$projectID\", \"$rewardsAvail[$i]\")");
+					}
+					if($rSuccess){
+						$report_msg[] = "Reward: " . $rewardsTitle[$i]. " was successfully added";
+					}
+				}
+			}
+		}else{
+			$error_msg[] = "Error adding award(s) due to errors.";
+		}
+
+		if ($success && $rewardSuccess){
+			//send email
+			$email_template_params = array();
+			$email_template_params['FULLNAME']  = $creatorName;
+
+			$to_email = $creatorEmail;
+			$subject = "Thank you for your project submission";
+
+			$success = send_email_from_template("project-review-letter.html",$to_email,$subject,$email_template_params, 1, $globals['emails_from']);
+			if ($success){
+				$report_msg[] = "Your project was successfully added.";
+			}
+			else{
+				$error_msg[] = "Your project was added to our database, but we could not email you a confirmation for some reason.";
+			}
+		}
+		else {
+			$error_msg[] = "There was an error adding your project.";
+		}
 	}//submitProject
 
 
@@ -281,7 +277,7 @@
 			<div class="search-results-info">
 				<h2>My Account <p style="float:right"><a href="edit-profile.php" <?=$editProfileStyle?>>edit my profile</a></h2>
 			</div>
-                <form id="submitForm" name="submitForm" method="post" action="<?=$submitPage?>" enctype="multipart/form-data">
+                <form id="submitForm" name="submitForm" target="upload_iframe" method="post" action="<?=$_SERVER['PHP_SELF']?>" enctype="multipart/form-data">
                     <input type="hidden" name="MAX_FILE_SIZE" value="15000000" />
 			<div class="page-Leftcol col">
 				<div class="left-col-inner">
@@ -300,6 +296,7 @@
 					if ($numProjects > 0){
 
 						//echo_msg_box(); //another box for not updating address profile message (if necessary)
+						$readOnlyKeyword = true;
 ?>
 
 						<h3>You may review your project status below</h3>
@@ -341,7 +338,7 @@
                     	</p>
 <?					}//else
 					else{
-						$submitPage = "my_account.php";
+						//$submitPage = "my_account.php";
 						include("proj_submission_form.inc.php");
 					}
 ?>
@@ -350,7 +347,7 @@
 					<!-- end inner div -->
                 </div>
 			<?
-                        include('rewards_sidebar.inc.php');?>
+                        include('rewards_sidebar.inc2.php');?>
                 </form>
 
 

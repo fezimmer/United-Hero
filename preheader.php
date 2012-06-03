@@ -21,10 +21,10 @@
 
     $globals['contact_email'] = 'sdempsey@loudcanvas.com';
     //$globals['contact_email'] = 'mattd@unitedhero.com';
-    $globals['contact_email'] = "info@" . $globals[site_name];
+    $globals['contact_email'] = "info@" . $globals['site_name'];
 
 	//emails from the website
-	$globals['emails_from'] = "noreply@" . $globals[site_name];
+	$globals['emails_from'] = "noreply@" . $globals['site_name'];
     $globals['contact_email_name'] = "United Hero";
     $globals['emails_from'] = $globals['contact_email_name'] . "<" . $globals['emails_from'] . ">";
 

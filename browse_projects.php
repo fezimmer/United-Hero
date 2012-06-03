@@ -7,62 +7,62 @@
 		$submitButtonHTML = "<a href=\"my_account.php\" class=\"cta start-project\" title=\"Submit Your Product\">Submit Your Product</a>\n";
 	}
 
-        //start pagination code
-        $itemsPerPage = 15; //max number of projects displayed per page
-        $indexesPerPage = 10;  //max number of pages displayed at bottom of page (index group)
+	//start pagination code
+	$itemsPerPage = 15; //max number of projects displayed per page
+	$indexesPerPage = 10;  //max number of pages displayed at bottom of page (index group)
 
-        $curPage = $_GET['pageNum'];
-        if($curPage == NULL){
-            $curPage = 1;
-        }
+	$curPage = $_GET['pageNum'];
+	if($curPage == NULL){
+		$curPage = 1;
+	}
 
-        //sets statement for use in projectlist.inc.php, in the form of LIMIT startIndex, numberItems
-        $limitStatement = "LIMIT " . (($itemsPerPage*$curPage)-$itemsPerPage) . " , " . $itemsPerPage;
+	//sets statement for use in projectlist.inc.php, in the form of LIMIT startIndex, numberItems
+	$limitStatement = "LIMIT " . (($itemsPerPage*$curPage)-$itemsPerPage) . " , " . $itemsPerPage;
 
-        $numItems = q("SELECT pkProjectID FROM tblProject");
-        $numPages = ceil(sizeof($numItems)/$itemsPerPage);//calculate number of pages rounding up to closest page
+	$numItems = q("SELECT pkProjectID FROM tblProject WHERE (fldStatus = 'approved' OR fldStatus = 'funded') ");
+	$numPages = ceil(sizeof($numItems)/$itemsPerPage);//calculate number of pages rounding up to closest page
 
-        //checks to see if multiple index groups are needed
-        if($numPages > $indexesPerPage){ //multiple groups are needed
+	//checks to see if multiple index groups are needed
+	if($numPages > $indexesPerPage){ //multiple groups are needed
 
-            //decides what index group a page is locaed
-            if(($curPage % $indexesPerPage) == 0){ //find closest index group
-                $startPage = (($curPage - $indexesPerPage) + 1);
-            } else { //rounding to closest index group
-                $startPage = ((floor($curPage/$indexesPerPage)*$indexesPerPage) + 1);
-            }
+		//decides what index group a page is locaed
+		if(($curPage % $indexesPerPage) == 0){ //find closest index group
+			$startPage = (($curPage - $indexesPerPage) + 1);
+		} else { //rounding to closest index group
+			$startPage = ((floor($curPage/$indexesPerPage)*$indexesPerPage) + 1);
+		}
 
-            //logic to show weather index group has groups before/after
-            //check for index group after first
-            if(($numPages - $startPage) > $indexesPerPage){//has group(s) after
-                $indexPages = $indexesPerPage;
-                $endPages = false;
+		//logic to show weather index group has groups before/after
+		//check for index group after first
+		if(($numPages - $startPage) > $indexesPerPage){//has group(s) after
+			$indexPages = $indexesPerPage;
+			$endPages = false;
 
-                //check for index group before
-                if($startPage > $indexesPerPage){//has group(s) before
-                    $beginPages = false;
-                } else {
-                    $beginPages = true;
-                }
+			//check for index group before
+			if($startPage > $indexesPerPage){//has group(s) before
+				$beginPages = false;
+			} else {
+				$beginPages = true;
+			}
 
-            } else {//has no group after
-                $indexPages = ($numPages - $startPage + 1);
-                $endPages = true;//at the end
-                $beginPages = false;//if inside this loop, this must be false
-            }
+		} else {//has no group after
+			$indexPages = ($numPages - $startPage + 1);
+			$endPages = true;//at the end
+			$beginPages = false;//if inside this loop, this must be false
+		}
 
-        } else { //only one group, all projects fit within '$indexesPerPage' number of pages
-            $indexPages = $numPages;
-            $startPage = 1;
+	} else { //only one group, all projects fit within '$indexesPerPage' number of pages
+		$indexPages = $numPages;
+		$startPage = 1;
 
-            // no other groups
-            $endPages = true;
-            $beginPages = true;
-        }
-        //end pagination
+		// no other groups
+		$endPages = true;
+		$beginPages = true;
+	}
+	//end pagination
 
-        //get list of projects call for projectlist.inc.php
-        $projects = q("SELECT pkProjectID, fldTitle, fldDescription, fldLocation, fldDesiredFundingAmount, fldVideoHTML, fldTags, fldStatus, fldActualFunding, fldDateCreated, fkUserID, fldImage FROM tblProject WHERE (fldStatus = 'approved' OR fldStatus = 'funded') ORDER BY fldDateCreated $limitStatement");
+	//get list of projects call for projectlist.inc.php
+	$projects = q("SELECT pkProjectID, fldTitle, fldDescription, fldLocation, fldDesiredFundingAmount, fldVideoHTML, fldTags, fldStatus, fldActualFunding, fldDateCreated, fkUserID, fldImage FROM tblProject WHERE (fldStatus = 'approved' OR fldStatus = 'funded') ORDER BY fldDateCreated $limitStatement");
 ?>
 
 			 <div style="clear: both;"></div>

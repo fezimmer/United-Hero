@@ -9,7 +9,8 @@
 	$thisURL = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
 
 	require_once("preheader.php");
-
+	//require_once("tweet.php");
+	
 	$projectID 	= $_REQUEST['id'];
 	//if param not id, it may be pkProjectID
 	if(!$projectID) $projectID = $_REQUEST['pkProjectID'];
@@ -27,12 +28,13 @@
 			exit();
 		}
 	}
-
+	
+	//include("facebookImgResize.php");
 	$pageTitle = $fldTitle;
 	$metaDesc = $fldDescription;
-	//removed resize(90) from metaImage
 	$metaImage = "http://" . $globals['site_name'] . "/magick.php/$fldImage?";
 
+	
 	$submittedByInfo 	= qr("SELECT fldFName, fldLName, fldUsername, fldEmail, fldPhone, fldZip, fldSignupDate, fldIPAddress, fldType, fldActive, fldLastLogin FROM tblUser WHERE pkUserID = $fkUserID");
 	extract($submittedByInfo);
 
@@ -233,21 +235,18 @@
 
 					<br />
 					<iframe src="//www.facebook.com/plugins/like.php?app_id=267526983268917&amp;href=<?=$thisURL?>&amp;send=false&amp;layout=standard&amp;width=450&amp;show_faces=true&amp;action=like&amp;colorscheme=light&amp;font&amp;height=80" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:450px; height:80px;" allowTransparency="true"></iframe>
-					<!-- upload.twitter.com    http://twitter.com/share-->
-					<script>
-					var pageTitle = "<?= $pageTitle ?>";
-					var metaImage = "<?= $metaImage ?>";
-					</script>
-					<a href="http://twitter.com/share" 
-					class="twitter-share-button" 
-					data-count="vertical"
+					<!-- upload.twitter.com    http://twitter.com/share -->
 					
+					<a href="http://twitter.com/share" class="twitter-share-button" 
+					data-count="vertical"
+					data-text="<? echo $pageTitle; echo $metaImage;  ?>"
+					data-url="<?php echo $thisURL ?>"
+					<!-- -->
+							
 					>Tweet</a>
 					<script type="text/javascript" 
 					src="http://platform.twitter.com/widgets.js">
-					</script>
-
-				</div>
+					</script>				</div>
 			</div>
 			<div class="project-details inner-col">
 
@@ -353,9 +352,9 @@
 
 		  <div>
 			 <div style="clear: both"></div>
-			<div class="similar" style="height:35px;">Similar Products
+			<div class="similar">Similar Products
 				<!--a href="/browse_projects.php" class="cta browse-projects" title="Browse Current Products">Browse other Products</a-->
-				<a href="/browse_projects.php?pageNum=1" class="browse-more"><button align="center" class="button button-blue" style="font-size: 20px;">Browse other Products</button></a>
+				<a href="/browse_projects.php?pageNum=1" class="browse-more" style="background-color: #2795D4; color: #000;">Browse other Products</a>
 			</div>
 			 <div class="boxLine_first_new">
 				<div class="blogTitle_box blogTitle_box_new" id="postsDiv">

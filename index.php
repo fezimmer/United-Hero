@@ -70,7 +70,7 @@
 ?>
 			 <!--iframe class="video" src="http://player.vimeo.com/video/4121765" width="442" height="257"></iframe-->
 
-			 <h3><a id="projectTitle" href="/project.php?id=<?=$pkProjectID?>"><?=$fldTitle?></a> - <a style='font-size: <?=$fundProjectTextSize?>px' id="fundProject" href="/project.php?id=<?=$pkProjectID?>&support=1"><b><?=$fundThisProjectText?></b></a></h3></a>
+			 <h3><a id="projectTitle" href="/project.php?id=<?=$pkProjectID?>"><?=$fldTitle?></a> - <a style='font-size: <?=$fundProjectTextSize?>px' id="fundProject" href="/rewards.php?id=<?=$pkProjectID?>"><b><?=$fundThisProjectText?></b></a></h3></a> <!--/project.php?id=<?=$pkProjectID?>&support=1-->
 			 <p><?=$fldDescription?></p>
 			</a>
 			<div class="location"><?=$fldLocation?></div>

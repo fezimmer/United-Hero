@@ -372,7 +372,11 @@
 	include("header.php");
 
 ?>
-
+<!-- Jquery validation -->
+<style type="text/css">
+label { }
+label.error { float: none; color: red; padding-left: .5em; vertical-align: top; }
+</style>
 
 		<div>
 			<div style="clear: both;"></div>

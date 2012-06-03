@@ -151,27 +151,27 @@
         }
 
         function getMonthForReward($val){
-            if($val == "01"){
+            if(strcmp($val, "01") == 0){
                 return "Jan";
-            }elseif($val == "02"){
+            }if(strcmp($val, "02") == 0){
                 return "Feb";
-            }elseif($val == "03"){
+            }if(strcmp($val, "03") == 0){
                 return "Mar";
-            }elseif($val == "04"){
+            }if(strcmp($val, "04") == 0){
                 return "Apr";
-            }elseif($val == "05"){
+            }if(strcmp($val, "05") == 0){
                 return "May";
-            }elseif($val == "06"){
+            }if(strcmp($val, "06") == 0){
                 return "Jun";
-            }elseif($val == "07"){
+            }if(strcmp($val, "07") == 0){
                 return "Jul";
-            }elseif($val == "08"){
+            }if(strcmp($val, "08") == 0){
                 return "Aug";
-            }elseif($val == "09"){
+            }if(strcmp($val, "09") == 0){
                 return "Sep";
-            }elseif($val == "10"){
+            }if(strcmp($val, "10") == 0){
                 return "Oct";
-            }elseif($val == "11"){
+            }if(strcmp($val, "11") == 0){
                 return "Nov";
             }else{
                 return "Dec";

@@ -45,7 +45,7 @@
                         <?  }?>
                             </span>
                         </h3>
-                        <span style="padding:10px 0 20px 20px;">Delivery: <?=getMonthForReward($reward['fldDeliveryMonth'])?> <?=$reward['fldRewardYear']?></span>
+                        <span style="padding:10px 0 20px 20px;">Delivery: <?=getMonthForReward($reward['fldRewardMonth'])?> <?=$reward['fldRewardYear']?></span>
                 <?
                 $showTable = q1("SELECT COUNT(*) FROM tblRewards WHERE fkPaymentID > \"0\" AND fkProjectID = \"$projectID\" AND fldTitle = \"$rTitle\" AND fldDescription = \"$rDesc\"");
                 if($showTable != 0){

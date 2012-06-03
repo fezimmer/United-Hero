@@ -12,19 +12,38 @@
 		$action = "updateProject";
 		$what = "update";
 	}
-	$submitButtonHTML = "<button align=\"center\" class=\"button button-blue\" style=\"font-size: 20px;\" onClick=\"getElementById('submitForm').submit();\">$buttonValue</button>";
+	$submitButtonHTML = "<button align=\"center\" class=\"button button-blue\" style=\"font-size: 20px;\" onClick=\"validateAndSubmit('submitForm')\">$buttonValue</button>";
 
 	$fldPhoneNumber = q1("SELECT fldPhone FROM tblUser WHERE pkUserID = $userID");
 ?>
 
 	<script language="javascript" type="text/javascript">
-	function limitText(limitField, limitCount, limitNum) {
-		if (limitField.value.length > limitNum) {
-			limitField.value = limitField.value.substring(0, limitNum);
-		} else {
-			limitCount.value = limitNum - limitField.value.length;
+		var fileName = "";
+		$(function() {
+			$("input:file").change(function (){
+				fileName = $(this).val();
+			});
+		});
+		function limitText(limitField, limitCount, limitNum) {
+			if (limitField.value.length > limitNum) {
+				limitField.value = limitField.value.substring(0, limitNum);
+			} else {
+				limitCount.value = limitNum - limitField.value.length;
+			}
 		}
-	}
+
+        function validateAndSubmit(form){
+            //alert("validating");
+            if(fileName == ""){
+                document.getElementById("fldImageError").style.display = "block";
+            }else{
+                document.getElementById("fldImageError").style.display = "none";
+                document.getElementById("submitForm").target="";
+                document.getElementById("fileframe").value = "false";
+                form.submit();
+            }
+            return;
+        }
 	</script>
 
 			 <div class="">
@@ -55,7 +74,8 @@
 				<br/> <br/>
 
 				<p><b>IMAGE UPLOAD</b> Upload an image of your Product</p>
-				<input name="fldImage" type="file">
+                                <div id="fldImageError" style="display:none; color:red;">Image is required</div>
+				<input name="fldImage" id="fldImage" type="file">
 				<?if($fldImage != ""){?><span style="margin-left:15px;">Currently: <img src="/magick.php/<?=$fldImage?>" alt="PROJECT IMAGE" height="35"/></span><?}?>
 				<br/><br/>
 

@@ -667,14 +667,20 @@ margin-left:0;
 	width:170px;
 	height:30px;
 	line-height:30px;
-	color:#666;
-	background:#CCC;
 	text-align:center;
-	text-shadow: 1px 1px 1px #FFF;
 	font-size:14px;
 	-moz-border-radius:4px;
 	-webkit-border-radius:4px;
 	border-radius:4px;
+      background-image:url(https://unitedhero.com/images/global-signup-btn.png);
+      background-position:initial initial;
+      background-repeat:no-repeat no-repeat;
+      color:#175267;
+      font-size:18px;
+      height:43px;
+      line-height:40px;
+      text-align:center;
+      text-shadow:#A2E4EE 0 1px 0;
 }
 
 .featuredBox {
